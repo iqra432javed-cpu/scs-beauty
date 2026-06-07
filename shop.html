@@ -1,1 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — SCS Beauty | Pakistan's Premium Skincare</title>
+  <meta name="description" content="Shop SCS organic serums, beauty creams, skin polish and more. Cash on delivery all over Pakistan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    /* ── SHOP PAGE SPECIFIC STYLES ── */
+    .page-hero {
+      padding: 140px 5vw 80px;
+      background: linear-gradient(135deg, #FDF8F8 0%, #FAF5F0 50%, #F5E8E0 100%);
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .page-hero::before {
+      content: '✦'; position: absolute; font-size: 28rem; opacity: 0.03;
+      top: -8rem; right: -6rem; color: var(--rose-gold); line-height: 1; pointer-events: none;
+    }
+    .page-hero-tag {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--champagne);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .page-hero-tag::before, .page-hero-tag::after {
+      content: ''; width: 28px; height: 1px; background: var(--champagne);
+    }
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 500;
+      color: var(--text-dark); line-height: 1.1; margin-bottom: 1rem;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--rose-gold); }
+    .page-hero p {
+      font-size: 1rem; color: #888; max-width: 500px;
+      margin: 0 auto; line-height: 1.8;
+    }
 
+    /* ── SHOP TOOLBAR ── */
+    .shop-toolbar {
+      padding: 2rem 5vw;
+      background: white;
+      border-bottom: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap;
+      position: sticky; top: 72px; z-index: 100;
+    }
+    .filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .filter-tab {
+      padding: 0.5rem 1.2rem; border-radius: 50px;
+      border: 1px solid var(--border-light);
+      font-size: 0.78rem; font-weight: 500; cursor: pointer;
+      background: white; color: #888;
+      transition: all 0.2s;
+    }
+    .filter-tab:hover, .filter-tab.active {
+      background: var(--rose-gold); color: white; border-color: var(--rose-gold);
+    }
+    .shop-search {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: var(--soft-bg); border: 1px solid var(--border-light);
+      border-radius: 50px; padding: 0.5rem 1.2rem;
+      min-width: 240px;
+    }
+    .shop-search input {
+      border: none; outline: none; background: transparent;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--text-dark);
+      width: 100%;
+    }
+    .shop-search input::placeholder { color: #bbb; }
+    .search-icon { color: #bbb; font-size: 0.9rem; }
+    .results-count { font-size: 0.78rem; color: #aaa; white-space: nowrap; }
+
+    /* ── SHOP GRID ── */
+    .shop-main { padding: 3rem 5vw 6rem; }
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.75rem;
+    }
+
+    /* ── PRODUCT CARD EXTENDED ── */
+    .shop-card {
+      background: white; border-radius: 22px; overflow: hidden;
+      border: 1px solid var(--border-light);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer; position: relative;
+    }
+    .shop-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 24px 55px rgba(183, 110, 121, 0.15);
+    }
+    .shop-card-img {
+      aspect-ratio: 1/1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5.5rem; position: relative; overflow: hidden;
+    }
+    .shop-card-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.05));
+    }
+    .shop-card-badge {
+      position: absolute; top: 16px; left: 16px; z-index: 1;
+      background: var(--champagne); color: #5A3A0A;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 50px;
+    }
+    .badge-hot { background: var(--rose-gold); color: white; }
+    .badge-new { background: #6DB88B; color: white; }
+    .shop-card-wishlist {
+      position: absolute; top: 14px; right: 14px; z-index: 1;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+    }
+    .shop-card-wishlist:hover { background: var(--soft-blush); }
+    .shop-card-body { padding: 1.5rem; }
+    .shop-card-cat {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted-rose); margin-bottom: 0.45rem;
+    }
+    .shop-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 500; line-height: 1.3;
+      color: var(--text-dark); margin-bottom: 0.45rem;
+    }
+    .shop-card-desc { font-size: 0.78rem; color: #aaa; line-height: 1.65; margin-bottom: 1rem; }
+    .shop-card-stars { color: var(--champagne); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 1rem; }
+    .shop-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .shop-card-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 600; color: var(--rose-gold);
+    }
+    .shop-card-price small {
+      font-size: 0.68rem; color: #bbb; font-family: 'Inter', sans-serif;
+      font-weight: 400; display: block;
+    }
+    .shop-order-btn {
+      background: var(--rose-gold); color: white;
+      border: none; border-radius: 50px;
+      padding: 0.6rem 1.3rem;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .shop-order-btn:hover { background: var(--deep-rose); transform: scale(1.04); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center; padding: 4rem 2rem;
+      color: #bbb;
+    }
+    .empty-state-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── PROMO BANNER ── */
+    .promo-banner {
+      background: linear-gradient(135deg, var(--rose-gold), var(--deep-rose));
+      padding: 2rem 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .promo-text { color: white; }
+    .promo-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 500; margin-bottom: 0.35rem;
+    }
+    .promo-text p { font-size: 0.85rem; opacity: 0.85; }
+    .promo-badge {
+      background: var(--champagne); color: #5A3A0A;
+      padding: 0.5rem 1.5rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    /* ── HOW TO ORDER ── */
+    .how-section {
+      background: var(--warm-ivory); padding: 5rem 5vw;
+    }
+    .how-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2rem; margin-top: 3rem;
+    }
+    .how-step { text-align: center; padding: 1.5rem; }
+    .how-num {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--soft-blush);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 600; color: var(--rose-gold);
+      margin: 0 auto 1rem;
+    }
+    .how-title { font-weight: 600; font-size: 0.9rem; color: var(--text-dark); margin-bottom: 0.4rem; }
+    .how-desc { font-size: 0.78rem; color: #aaa; line-height: 1.7; }
+
+    /* ── TRUST STRIP ── */
+    .trust-strip {
+      background: white; padding: 2rem 5vw;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      gap: 3rem; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.82rem; color: #888;
+    }
+    .trust-item-icon { font-size: 1.4rem; }
+    .trust-item strong { color: var(--text-dark); display: block; font-size: 0.85rem; }
+
+    @media (max-width: 768px) {
+      .shop-toolbar { position: static; flex-direction: column; align-items: stretch; }
+      .shop-search { min-width: unset; }
+      .how-steps { grid-template-columns: 1fr 1fr; }
+      .trust-strip { gap: 1.5rem; }
+      .promo-banner { text-align: center; justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .shop-grid { grid-template-columns: 1fr; }
+      .how-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Success Chaser <span>Stars</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="shop.html" style="color:var(--rose-gold);opacity:1">Products</a></li>
+    <li><a href="about.html">Our Story</a></li>
+    <li><a href="index.html#lifestyle">Lifestyle</a></li>
+    <li><a href="blog.html">Beauty Tips</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="partner.html" class="nav-cta">Become a Partner</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-tag">The SCS Collection</div>
+  <h1>Shop Your <em>Glow</em></h1>
+  <p>Organic, results-driven skincare formulated for South Asian skin. Cash on delivery all over Pakistan.</p>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item">
+    <span class="trust-item-icon">🚚</span>
+    <div><strong>Free Delivery</strong> Orders above PKR 2,000</div>
+  </div>
+  <div class="trust-item">
+    <span class="trust-item-icon">💵</span>
+    <div><strong>Cash on Delivery</strong> All over Pakistan</div>
+  </div>
+  <div class="trust-item">
+    <span class="trust-item-icon">🔄</span>
+    <div><strong>Easy Returns</strong> 7-day return policy</div>
+  </div>
+  <div class="trust-item">
+    <span class="trust-item-icon">🌿</span>
+    <div><strong>100% Organic</strong> No harsh chemicals</div>
+  </div>
+  <div class="trust-item">
+    <span class="trust-item-icon">✅</span>
+    <div><strong>Certified Safe</strong> Dermatologist tested</div>
+  </div>
+</div>
+
+<!-- SHOP TOOLBAR -->
+<div class="shop-toolbar">
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" onclick="filterShop('all', this)">All Products</button>
+    <button class="filter-tab" onclick="filterShop('Serums', this)">Serums</button>
+    <button class="filter-tab" onclick="filterShop('Creams', this)">Creams</button>
+    <button class="filter-tab" onclick="filterShop('Sun Protection', this)">Sun Protection</button>
+    <button class="filter-tab" onclick="filterShop('Polish & Exfoliation', this)">Polish</button>
+    <button class="filter-tab" onclick="filterShop('Treatments', this)">Treatments</button>
+  </div>
+  <div class="shop-search">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search products..." oninput="searchProducts(this.value)">
+  </div>
+  <span class="results-count" id="resultsCount">8 products</span>
+</div>
+
+<!-- SHOP GRID -->
+<div class="shop-main">
+  <div class="shop-grid" id="shopGrid">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div class="promo-text">
+    <h3>Order via WhatsApp & Save 10%</h3>
+    <p>Mention code <strong>SCS10</strong> when ordering directly on WhatsApp. Limited time offer.</p>
+  </div>
+  <a href="https://wa.me/923017658679?text=Hi! I want to order. Code: SCS10" class="promo-badge" target="_blank">
+    💬 Order Now & Save
+  </a>
+</div>
+
+<!-- HOW TO ORDER -->
+<section class="how-section">
+  <div style="text-align:center; margin-bottom:0">
+    <div class="page-hero-tag">Simple Process</div>
+    <h2 class="section-title" style="text-align:center">How to <em>Order</em></h2>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="how-num">1</div>
+      <div class="how-title">Choose Your Product</div>
+      <div class="how-desc">Browse our full collection and tap the order button on any product you love.</div>
+    </div>
+    <div class="how-step reveal">
+      <div class="how-num">2</div>
+      <div class="how-title">WhatsApp Us</div>
+      <div class="how-desc">You'll be taken to WhatsApp with your order pre-filled. Confirm your details with us.</div>
+    </div>
+    <div class="how-step reveal">
+      <div class="how-num">3</div>
+      <div class="how-title">Confirm & Pay</div>
+      <div class="how-desc">We confirm availability and dispatch. Cash on delivery — no advance payment needed.</div>
+    </div>
+    <div class="how-step reveal">
+      <div class="how-num">4</div>
+      <div class="how-title">Receive & Glow</div>
+      <div class="how-desc">Your order arrives in 3–5 working days anywhere in Pakistan. Start your glow journey!</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">Success Chaser <span>Stars</span></a>
+      <p>Pakistan's premier organic beauty and wellness brand. Empowering women through transformative skincare and meaningful entrepreneurship.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/scs_skin.care/" class="social-btn" target="_blank">📸</a>
+        <a href="https://www.facebook.com/SuccessChaserStars/" class="social-btn" target="_blank">💙</a>
+        <a href="https://wa.me/923017658679" class="social-btn" target="_blank">💬</a>
+        <a href="https://www.tiktok.com/@successchaserstar" class="social-btn" target="_blank">🎵</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="shop.html">Shop All</a></li>
+        <li><a href="about.html">Our Story</a></li>
+        <li><a href="partner.html">Become a Partner</a></li>
+        <li><a href="blog.html">Beauty Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="#" onclick="filterShop('Serums',null)">Serums</a></li>
+        <li><a href="#" onclick="filterShop('Creams',null)">Creams</a></li>
+        <li><a href="#" onclick="filterShop('Sun Protection',null)">Sun Protection</a></li>
+        <li><a href="#" onclick="filterShop('Treatments',null)">Treatments</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/923017658679" target="_blank">+92 301 765 8679</a></li>
+        <li><a href="mailto:shahzebali0202@gmail.com">shahzebali0202@gmail.com</a></li>
+        <li><a href="#">Khanpur & Rawalpindi</a></li>
+        <li><a href="#">Open 24/7</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Success Chaser Stars. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Delivery Policy</a></p>
+  </div>
+</footer>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <a href="https://wa.me/923017658679?text=Hi! I want to order SCS products" class="sticky-btn" target="_blank">💬 WhatsApp Us</a>
+</div>
+
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // ── SHOP PAGE LOGIC ──
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  function renderShopGrid(products) {
+    const grid = document.getElementById('shopGrid');
+    const count = document.getElementById('resultsCount');
+    if (!grid) return;
+
+    if (products.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🔍</div>
+          <p>No products found. Try a different search or filter.</p>
+        </div>`;
+      if (count) count.textContent = '0 products';
+      return;
+    }
+
+    const badgeClass = (badge) => {
+      if (!badge) return '';
+      if (badge === 'Bestseller') return 'badge-hot';
+      if (badge === 'New' || badge === 'New 2025') return 'badge-new';
+      return '';
+    };
+
+    grid.innerHTML = products.map((p, i) => `
+      <div class="shop-card reveal" style="transition-delay:${i * 0.07}s">
+        <div class="shop-card-img ${p.bg}">
+          <span>${p.icon}</span>
+          ${p.badge ? `<div class="shop-card-badge ${badgeClass(p.badge)}">${p.badge}</div>` : ''}
+          <div class="shop-card-wishlist" title="Save for later">🤍</div>
+        </div>
+        <div class="shop-card-body">
+          <div class="shop-card-cat">${p.category}</div>
+          <div class="shop-card-name">${p.name}</div>
+          <div class="shop-card-stars">★★★★★</div>
+          <div class="shop-card-desc">${p.desc}</div>
+          <div class="shop-card-footer">
+            <div class="shop-card-price">
+              PKR ${p.price.toLocaleString()}
+              <small>Cash on Delivery</small>
+            </div>
+            <button class="shop-order-btn" onclick="orderProduct(${p.id})">
+              Order →
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    if (count) count.textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
+
+    // Re-observe for reveal
+    grid.querySelectorAll('.reveal').forEach(el => {
+      if (window.revealObserver) window.revealObserver.observe(el);
+    });
+  }
+
+  function getFiltered() {
+    return SCS_PRODUCTS.filter(p => {
+      const matchCat = currentFilter === 'all' || p.category === currentFilter;
+      const matchSearch = p.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                          p.desc.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                          p.category.toLowerCase().includes(currentSearch.toLowerCase());
+      return matchCat && matchSearch;
+    });
+  }
+
+  function filterShop(category, btn) {
+    currentFilter = category;
+    // Update active tab
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderShopGrid(getFiltered());
+    window.scrollTo({ top: document.querySelector('.shop-toolbar').offsetTop - 80, behavior: 'smooth' });
+  }
+
+  function searchProducts(val) {
+    currentSearch = val;
+    renderShopGrid(getFiltered());
+  }
+
+  // Initial render
+  document.addEventListener('DOMContentLoaded', () => {
+    renderShopGrid(SCS_PRODUCTS);
+  });
+</script>
+</body>
+</html>
