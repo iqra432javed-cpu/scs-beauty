@@ -1,31 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Success Chaser Stars — Premium Beauty & Wellness | Pakistan</title>
-  <meta name="description" content="Discover SCS — Pakistan's premier luxury beauty and wellness brand. Organic skincare serums, beauty creams, and wellness products crafted for radiant transformation.">
-  <meta property="og:title" content="Success Chaser Stars — Premium Beauty & Wellness">
-  <meta property="og:description" content="Pakistan's premier luxury beauty brand. Glow serums, beauty creams, skin polish and more.">
-  <meta property="og:type" content="website">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- ═══ SEO PHASE 3 ═══ -->
+<title>Success Chaser Stars — Organic Skincare & Beauty | Pakistan</title>
+<meta name="description" content="Pakistan's premier organic beauty brand. Shop Vitamin C Serums, Glow Serums, Beauty Creams & more. Cash on delivery nationwide. 50,000+ happy customers.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://iqra432javed-cpu.github.io/scs-beauty/">
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
+<!-- Open Graph -->
+<meta property="og:title" content="Success Chaser Stars — Organic Beauty & Skincare Pakistan">
+<meta property="og:description" content="Discover SCS — Pakistan's premier luxury beauty brand. Organic serums, creams & wellness products crafted for South Asian skin. COD available nationwide.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://iqra432javed-cpu.github.io/scs-beauty/">
+<meta property="og:image" content="https://iqra432javed-cpu.github.io/scs-beauty/assests/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Success Chaser Stars — Pakistan's Premium Organic Beauty Brand">
+<meta property="og:site_name" content="Success Chaser Stars">
+<meta property="og:locale" content="en_PK">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Success Chaser Stars — Organic Beauty Pakistan">
+<meta name="twitter:description" content="Pakistan's premier organic beauty brand. Vitamin C Serums, Glow Serums, Beauty Creams. COD nationwide.">
+<meta name="twitter:image" content="https://iqra432javed-cpu.github.io/scs-beauty/assests/images/og-image.jpg">
+
+<!-- JSON-LD Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Success Chaser Stars",
+  "url": "https://iqra432javed-cpu.github.io/scs-beauty/",
+  "logo": "https://iqra432javed-cpu.github.io/scs-beauty/assests/icons/favicon.png",
+  "description": "Pakistan's premier organic beauty and wellness brand. Formulated for South Asian skin.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+92-301-765-8679",
+    "contactType": "customer service",
+    "availableLanguage": ["en", "ur"]
+  },
+  "sameAs": [
+    "https://www.instagram.com/scs_skin.care/",
+    "https://www.facebook.com/SuccessChaserStars/",
+    "https://www.tiktok.com/@successchaserstar"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "PK",
+    "addressRegion": "Punjab"
+  }
+}
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
 
 <!-- ════════════════════════════════════════════
-     NAVIGATION
+NAVIGATION
 ════════════════════════════════════════════ -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">Success Chaser <span>Stars</span></a>
-  <ul class="nav-links" id="navLinks">
+  <a href="#" class="nav-logo" aria-label="Success Chaser Stars — Home">Success Chaser <span>Stars</span></a>
+  <ul class="nav-links" id="navLinks" role="navigation" aria-label="Main navigation">
     <li><a href="#products">Products</a></li>
     <li><a href="#story">Our Story</a></li>
     <li><a href="#lifestyle">Lifestyle</a></li>
@@ -33,52 +80,48 @@
     <li><a href="#contact">Contact</a></li>
     <li><a href="#opportunity" class="nav-cta">Become a Partner</a></li>
   </ul>
-  <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks">
     <span></span><span></span><span></span>
-  </div>
+  </button>
 </nav>
 
-
 <!-- ════════════════════════════════════════════
-     HERO
+HERO
 ════════════════════════════════════════════ -->
-<section class="hero" id="home">
+<section class="hero" id="home" aria-label="Hero">
   <div class="hero-bg">
     <div class="hero-circle hero-circle-1"></div>
     <div class="hero-circle hero-circle-2"></div>
   </div>
-
   <div>
     <div class="hero-content">
       <div class="hero-eyebrow">Pakistan's Premium Beauty Brand</div>
       <h1>Reveal Your Most <em>Radiant</em> Self</h1>
       <p class="hero-sub">Organic, results-driven beauty formulated for South Asian skin. From brightening serums to nourishing creams — discover the SCS difference.</p>
       <div class="hero-btns">
-        <a href="#products" class="btn-primary">✦ Explore Products</a>
-        <a href="#opportunity" class="btn-secondary">Become a Partner →</a>
+        <a href="https://wa.me/923017658679?text=Hi!%20I%20want%20to%20order%20SCS%20products" class="btn-primary" target="_blank" rel="noopener" aria-label="Order SCS products on WhatsApp">✦ Order on WhatsApp</a>
+        <a href="#products" class="btn-secondary">Explore Products →</a>
       </div>
     </div>
-
-    <div class="hero-trust">
-      <div class="hero-trust-item">
+    <div class="hero-trust" role="list">
+      <div class="hero-trust-item" role="listitem">
         <span class="trust-num">50K+</span>
         <span class="trust-label">Happy Customers</span>
       </div>
-      <div class="trust-divider"></div>
-      <div class="hero-trust-item">
+      <div class="trust-divider" aria-hidden="true"></div>
+      <div class="hero-trust-item" role="listitem">
         <span class="trust-num">100%</span>
         <span class="trust-label">Organic Formula</span>
       </div>
-      <div class="trust-divider"></div>
-      <div class="hero-trust-item">
+      <div class="trust-divider" aria-hidden="true"></div>
+      <div class="hero-trust-item" role="listitem">
         <span class="trust-num">5000+</span>
         <span class="trust-label">Active Partners</span>
       </div>
     </div>
   </div>
 
-  <!-- Floating product cards (desktop only) -->
-  <div class="hero-visual">
+  <div class="hero-visual" aria-hidden="true">
     <div class="hero-card-stack">
       <div class="hero-card hero-card-accent">
         <div class="product-icon-hero">💛</div>
@@ -93,11 +136,10 @@
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     MARQUEE BANNER
+MARQUEE BANNER
 ════════════════════════════════════════════ -->
-<div class="marquee-section">
+<div class="marquee-section" aria-hidden="true">
   <div class="marquee-track">
     <span class="marquee-item">Organic Formulas <span class="marquee-dot"></span></span>
     <span class="marquee-item">Results-Driven Skincare <span class="marquee-dot"></span></span>
@@ -106,7 +148,6 @@
     <span class="marquee-item">Certified Skin Consultants <span class="marquee-dot"></span></span>
     <span class="marquee-item">Paraben-Free Beauty <span class="marquee-dot"></span></span>
     <span class="marquee-item">Luxury at Accessible Prices <span class="marquee-dot"></span></span>
-    <!-- Duplicate for infinite loop -->
     <span class="marquee-item">Organic Formulas <span class="marquee-dot"></span></span>
     <span class="marquee-item">Results-Driven Skincare <span class="marquee-dot"></span></span>
     <span class="marquee-item">All Skin Types <span class="marquee-dot"></span></span>
@@ -117,13 +158,12 @@
   </div>
 </div>
 
-
 <!-- ════════════════════════════════════════════
-     BRAND STORY
+BRAND STORY
 ════════════════════════════════════════════ -->
-<section class="story-section reveal" id="story">
+<section class="story-section reveal" id="story" aria-labelledby="story-heading">
   <div class="story-visual">
-    <div class="story-img-frame">
+    <div class="story-img-frame" aria-hidden="true">
       <span>🌸</span>
       <div style="position:relative;z-index:1;text-align:center">
         <div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#8B4A56;font-style:italic;">Beauty begins within</div>
@@ -134,31 +174,30 @@
       <div class="float-card-label">Founded in Pakistan</div>
     </div>
   </div>
-
   <div class="story-text">
     <div class="section-tag">Our Story</div>
-    <h2 class="section-title">Beauty Born from <em>Purpose</em></h2>
+    <h2 class="section-title" id="story-heading">Beauty Born from <em>Purpose</em></h2>
     <p>Success Chaser Stars was born from a simple, powerful belief: every woman deserves access to premium, organic beauty that actually delivers results — without compromise on quality or price.</p>
     <p>We formulate every product with South Asian skin in mind. Our certified skin consultants guide thousands of women across Pakistan on their personal beauty journeys, from Karachi to Peshawar.</p>
     <p>More than a beauty brand — SCS is a movement. A community of confident, empowered women chasing success in every dimension of their lives.</p>
     <div class="story-pillars">
       <div class="pillar">
-        <div class="pillar-icon">🌿</div>
+        <div class="pillar-icon" aria-hidden="true">🌿</div>
         <div class="pillar-title">100% Organic</div>
         <div class="pillar-desc">Clean, nature-derived ingredients formulated for visible results.</div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🔬</div>
+        <div class="pillar-icon" aria-hidden="true">🔬</div>
         <div class="pillar-title">Science-Backed</div>
         <div class="pillar-desc">Every formula is researched and tested for South Asian skin types.</div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">💫</div>
+        <div class="pillar-icon" aria-hidden="true">💫</div>
         <div class="pillar-title">Transformative</div>
         <div class="pillar-desc">Real results, real women — 50,000+ glowing transformations.</div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🤝</div>
+        <div class="pillar-icon" aria-hidden="true">🤝</div>
         <div class="pillar-title">Community First</div>
         <div class="pillar-desc">A support network of certified consultants across Pakistan.</div>
       </div>
@@ -166,109 +205,103 @@
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     PRODUCTS
+PRODUCTS
 ════════════════════════════════════════════ -->
-<section class="products-section" id="products">
+<section class="products-section" id="products" aria-labelledby="products-heading">
   <div class="products-header reveal">
     <div class="section-tag">The Collection</div>
-    <h2 class="section-title">Curated for Your <em>Glow</em></h2>
+    <h2 class="section-title" id="products-heading">Curated for Your <em>Glow</em></h2>
     <p class="section-sub">Every SCS product is crafted with organic ingredients and proven actives to transform your skin from within.</p>
   </div>
-
-  <!-- Products rendered dynamically by products.js -->
-  <div class="products-grid" id="productsGrid"></div>
-
+  <div class="products-grid" id="productsGrid" role="list" aria-label="SCS product collection"></div>
   <div class="products-cta reveal">
-    <a href="https://wa.me/923017658679" class="btn-primary" target="_blank">View Full Collection →</a>
+    <a href="https://wa.me/923017658679?text=Hi!%20I%20want%20to%20see%20the%20full%20SCS%20product%20collection" class="btn-primary" target="_blank" rel="noopener" aria-label="View full product collection on WhatsApp">View Full Collection on WhatsApp →</a>
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     BENEFITS
+BENEFITS
 ════════════════════════════════════════════ -->
-<section class="benefits-section" id="benefits">
+<section class="benefits-section" id="benefits" aria-labelledby="benefits-heading">
   <div class="reveal">
     <div class="section-tag">Why SCS</div>
-    <h2 class="section-title">Beauty You Can <em>Trust</em></h2>
+    <h2 class="section-title" id="benefits-heading">Beauty You Can <em>Trust</em></h2>
     <p class="section-sub">Formulated with care, validated by results. Every SCS product meets the highest standards of quality and efficacy.</p>
   </div>
   <div class="benefits-grid">
     <div class="benefit-item reveal">
-      <div class="benefit-icon">🌿</div>
+      <div class="benefit-icon" aria-hidden="true">🌿</div>
       <div class="benefit-title">Organic Ingredients</div>
       <div class="benefit-desc">Pure botanical extracts and nature-derived actives. No harsh chemicals, no compromises.</div>
     </div>
     <div class="benefit-item reveal">
-      <div class="benefit-icon">🔬</div>
+      <div class="benefit-icon" aria-hidden="true">🔬</div>
       <div class="benefit-title">Clinically Formulated</div>
       <div class="benefit-desc">Science-backed formulas designed specifically for South Asian skin concerns and complexions.</div>
     </div>
     <div class="benefit-item reveal">
-      <div class="benefit-icon">✅</div>
+      <div class="benefit-icon" aria-hidden="true">✅</div>
       <div class="benefit-title">No Side Effects</div>
       <div class="benefit-desc">Dermatologist-friendly formulas. Safe, gentle, and effective for all skin types including sensitive skin.</div>
     </div>
     <div class="benefit-item reveal">
-      <div class="benefit-icon">💧</div>
+      <div class="benefit-icon" aria-hidden="true">💧</div>
       <div class="benefit-title">Deep Hydration</div>
       <div class="benefit-desc">Hyaluronic acid and natural humectants lock in moisture for all-day plump, dewy skin.</div>
     </div>
     <div class="benefit-item reveal">
-      <div class="benefit-icon">✨</div>
+      <div class="benefit-icon" aria-hidden="true">✨</div>
       <div class="benefit-title">Visible Results</div>
       <div class="benefit-desc">See a difference in as little as 7 days. Thousands of glowing before-and-afters speak for themselves.</div>
     </div>
     <div class="benefit-item reveal">
-      <div class="benefit-icon">🚚</div>
+      <div class="benefit-icon" aria-hidden="true">🚚</div>
       <div class="benefit-title">All Over Pakistan</div>
       <div class="benefit-desc">Fast, reliable cash-on-delivery available nationwide — from Karachi to Gilgit.</div>
     </div>
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     CATEGORIES
+CATEGORIES
 ════════════════════════════════════════════ -->
-<section class="categories-section" id="categories">
+<section class="categories-section" id="categories" aria-labelledby="categories-heading">
   <div class="reveal">
     <div class="section-tag">Shop by Category</div>
-    <h2 class="section-title">Find Your <em>Ritual</em></h2>
+    <h2 class="section-title" id="categories-heading">Find Your <em>Ritual</em></h2>
   </div>
   <div class="categories-grid reveal">
-    <div class="category-card large">
-      <div class="cat-bg cat-bg-1">💆‍♀️</div>
+    <div class="category-card large" role="button" tabindex="0" aria-label="Serums and Treatments — 6 Products" onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})">
+      <div class="cat-bg cat-bg-1" aria-hidden="true">💆‍♀️</div>
       <div class="category-overlay">
         <div class="category-name">Serums & Treatments</div>
         <div class="category-count">6 Products</div>
       </div>
     </div>
-    <div class="category-card">
-      <div class="cat-bg cat-bg-2">🌙</div>
+    <div class="category-card" role="button" tabindex="0" aria-label="Creams and Moisturisers — 3 Products" onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})">
+      <div class="cat-bg cat-bg-2" aria-hidden="true">🌙</div>
       <div class="category-overlay">
         <div class="category-name">Creams & Moisturisers</div>
         <div class="category-count">3 Products</div>
       </div>
     </div>
-    <div class="category-card">
-      <div class="cat-bg cat-bg-3">☀️</div>
+    <div class="category-card" role="button" tabindex="0" aria-label="Sun Protection — 2 Products" onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})">
+      <div class="cat-bg cat-bg-3" aria-hidden="true">☀️</div>
       <div class="category-overlay">
         <div class="category-name">Sun Protection</div>
         <div class="category-count">2 Products</div>
       </div>
     </div>
-    <div class="category-card">
-      <div class="cat-bg cat-bg-4">✨</div>
+    <div class="category-card" role="button" tabindex="0" aria-label="Glow and Polish — 4 Products" onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})">
+      <div class="cat-bg cat-bg-4" aria-hidden="true">✨</div>
       <div class="category-overlay">
         <div class="category-name">Glow & Polish</div>
         <div class="category-count">4 Products</div>
       </div>
     </div>
-    <div class="category-card">
-      <div class="cat-bg cat-bg-5">🌿</div>
+    <div class="category-card" role="button" tabindex="0" aria-label="Wellness and Body — 3 Products" onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})">
+      <div class="cat-bg cat-bg-5" aria-hidden="true">🌿</div>
       <div class="category-overlay">
         <div class="category-name">Wellness & Body</div>
         <div class="category-count">3 Products</div>
@@ -277,120 +310,118 @@
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     TESTIMONIALS
+TESTIMONIALS
 ════════════════════════════════════════════ -->
-<section class="testimonials-section" id="testimonials">
+<section class="testimonials-section" id="testimonials" aria-labelledby="testimonials-heading">
   <div class="testimonials-header reveal">
     <div class="section-tag">Transformations</div>
-    <h2 class="section-title">Real Women, <em>Real Results</em></h2>
+    <h2 class="section-title" id="testimonials-heading">Real Women, <em>Real Results</em></h2>
     <p class="section-sub" style="margin:0 auto;text-align:center">Thousands of women across Pakistan have discovered the SCS difference. Here are their stories.</p>
   </div>
-  <div class="testimonials-grid">
-    <div class="testimonial-card featured reveal">
-      <div class="testimonial-stars">★★★★★</div>
-      <div class="testimonial-text">"The Vitamin C Serum changed my skin completely in just 3 weeks! My dark spots are fading and I get compliments every day. I've never felt more confident."</div>
+  <div class="testimonials-grid" role="list">
+    <article class="testimonial-card featured reveal" role="listitem">
+      <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote class="testimonial-text">"The Vitamin C Serum changed my skin completely in just 3 weeks! My dark spots are fading and I get compliments every day. I've never felt more confident."</blockquote>
       <div class="testimonial-author">
-        <div class="author-avatar">FA</div>
+        <div class="author-avatar" aria-hidden="true">FA</div>
         <div>
           <div class="author-name">Fatima A.</div>
           <div class="author-city">Lahore, Pakistan</div>
         </div>
       </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="testimonial-stars">★★★★★</div>
-      <div class="testimonial-text">"I struggled with acne for years. The Anti-Acne Serum cleared my skin in ways nothing else could. SCS is a blessing for girls like me!"</div>
+    </article>
+    <article class="testimonial-card reveal" role="listitem">
+      <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote class="testimonial-text">"I struggled with acne for years. The Anti-Acne Serum cleared my skin in ways nothing else could. SCS is a blessing for girls like me!"</blockquote>
       <div class="testimonial-author">
-        <div class="author-avatar">SN</div>
+        <div class="author-avatar" aria-hidden="true">SN</div>
         <div>
           <div class="author-name">Sara N.</div>
           <div class="author-city">Karachi, Pakistan</div>
         </div>
       </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="testimonial-stars">★★★★★</div>
-      <div class="testimonial-text">"Not only do I love the products, but the business opportunity changed my life. I earn a good income while helping other women feel beautiful."</div>
+    </article>
+    <article class="testimonial-card reveal" role="listitem">
+      <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote class="testimonial-text">"Not only do I love the products, but the business opportunity changed my life. I earn a good income while helping other women feel beautiful."</blockquote>
       <div class="testimonial-author">
-        <div class="author-avatar">ZB</div>
+        <div class="author-avatar" aria-hidden="true">ZB</div>
         <div>
           <div class="author-name">Zainab B.</div>
           <div class="author-city">Islamabad, Pakistan</div>
         </div>
       </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="testimonial-stars">★★★★★</div>
-      <div class="testimonial-text">"The Glow Serum gives me the most beautiful dewy skin. It's become my holy grail and I recommend it to everyone in my family!"</div>
+    </article>
+    <article class="testimonial-card reveal" role="listitem">
+      <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote class="testimonial-text">"The Glow Serum gives me the most beautiful dewy skin. It's become my holy grail and I recommend it to everyone in my family!"</blockquote>
       <div class="testimonial-author">
-        <div class="author-avatar">MR</div>
+        <div class="author-avatar" aria-hidden="true">MR</div>
         <div>
           <div class="author-name">Maria R.</div>
           <div class="author-city">Faisalabad, Pakistan</div>
         </div>
       </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="testimonial-stars">★★★★★</div>
-      <div class="testimonial-text">"The Stars Beauty Cream is magic in a jar! My complexion has evened out so much, and my husband keeps saying I look 10 years younger."</div>
+    </article>
+    <article class="testimonial-card reveal" role="listitem">
+      <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote class="testimonial-text">"The Stars Beauty Cream is magic in a jar! My complexion has evened out so much, and my husband keeps saying I look 10 years younger."</blockquote>
       <div class="testimonial-author">
-        <div class="author-avatar">HA</div>
+        <div class="author-avatar" aria-hidden="true">HA</div>
         <div>
           <div class="author-name">Hira A.</div>
           <div class="author-city">Multan, Pakistan</div>
         </div>
       </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="testimonial-stars">★★★★★</div>
-      <div class="testimonial-text">"As a housewife, I never imagined running my own business. With SCS, I have financial independence and a community that supports me every step."</div>
+    </article>
+    <article class="testimonial-card reveal" role="listitem">
+      <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <blockquote class="testimonial-text">"As a housewife, I never imagined running my own business. With SCS, I have financial independence and a community that supports me every step."</blockquote>
       <div class="testimonial-author">
-        <div class="author-avatar">NK</div>
+        <div class="author-avatar" aria-hidden="true">NK</div>
         <div>
           <div class="author-name">Nadia K.</div>
           <div class="author-city">Rawalpindi, Pakistan</div>
         </div>
       </div>
-    </div>
+    </article>
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     LIFESTYLE
+LIFESTYLE
 ════════════════════════════════════════════ -->
-<section class="lifestyle-section" id="lifestyle">
+<section class="lifestyle-section" id="lifestyle" aria-labelledby="lifestyle-heading">
   <div class="lifestyle-grid">
     <div>
       <div class="section-tag">The SCS Life</div>
-      <h2 class="section-title">Beauty is a <em>Lifestyle</em></h2>
+      <h2 class="section-title" id="lifestyle-heading">Beauty is a <em>Lifestyle</em></h2>
       <p class="section-sub">SCS is more than skincare. It's a complete philosophy of self-care, confidence, and feminine empowerment.</p>
       <div class="lifestyle-features reveal">
         <div class="lifestyle-feature">
-          <div class="feature-icon-wrap">💄</div>
+          <div class="feature-icon-wrap" aria-hidden="true">💄</div>
           <div>
             <div class="feature-title">Your Daily Ritual</div>
             <div class="feature-desc">Build a consistent skincare routine guided by certified SCS skin consultants tailored to your skin type.</div>
           </div>
         </div>
         <div class="lifestyle-feature">
-          <div class="feature-icon-wrap">🌺</div>
+          <div class="feature-icon-wrap" aria-hidden="true">🌺</div>
           <div>
             <div class="feature-title">Confidence from Within</div>
             <div class="feature-desc">When your skin glows, your confidence follows. SCS products are designed to let your natural beauty shine.</div>
           </div>
         </div>
         <div class="lifestyle-feature">
-          <div class="feature-icon-wrap">👑</div>
+          <div class="feature-icon-wrap" aria-hidden="true">👑</div>
           <div>
             <div class="feature-title">The SCS Community</div>
             <div class="feature-desc">Join thousands of women who support each other's beauty journeys and business growth across Pakistan.</div>
           </div>
         </div>
         <div class="lifestyle-feature">
-          <div class="feature-icon-wrap">🎯</div>
+          <div class="feature-icon-wrap" aria-hidden="true">🎯</div>
           <div>
             <div class="feature-title">Expert Guidance</div>
             <div class="feature-desc">Access to trained skin consultants who personalise product recommendations for your specific concerns.</div>
@@ -398,7 +429,7 @@
         </div>
       </div>
     </div>
-    <div class="lifestyle-visual reveal">
+    <div class="lifestyle-visual reveal" aria-hidden="true">
       <div class="lifestyle-tile tile-1">
         <div class="lifestyle-tile-icon">🌸</div>
         <div class="lifestyle-tile-title">Morning Glow Ritual</div>
@@ -418,33 +449,32 @@
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     BUSINESS OPPORTUNITY
+BUSINESS OPPORTUNITY
 ════════════════════════════════════════════ -->
-<section class="opportunity-section" id="opportunity">
+<section class="opportunity-section" id="opportunity" aria-labelledby="opp-heading">
   <div class="opportunity-grid">
     <div class="reveal">
       <div class="section-tag">Partnership Program</div>
-      <h2 class="section-title">Build Your Dream <em>Business</em></h2>
+      <h2 class="section-title" id="opp-heading">Build Your Dream <em>Business</em></h2>
       <p class="section-sub">Join Pakistan's fastest-growing direct selling company. As an SCS Partner, you share products you love — and earn an income that transforms your life.</p>
       <div class="opportunity-steps">
         <div class="opp-step">
-          <div class="step-num">1</div>
+          <div class="step-num" aria-hidden="true">1</div>
           <div>
             <div class="step-title">Join the SCS Family</div>
             <div class="step-desc">Register as a partner and receive a complete starter kit with training materials and product samples.</div>
           </div>
         </div>
         <div class="opp-step">
-          <div class="step-num">2</div>
+          <div class="step-num" aria-hidden="true">2</div>
           <div>
             <div class="step-title">Get Certified & Trained</div>
             <div class="step-desc">Access our comprehensive skin consultant training program and business development resources.</div>
           </div>
         </div>
         <div class="opp-step">
-          <div class="step-num">3</div>
+          <div class="step-num" aria-hidden="true">3</div>
           <div>
             <div class="step-title">Share, Sell & Grow</div>
             <div class="step-desc">Build your customer base, earn commissions, and grow toward Regional Director — and beyond.</div>
@@ -452,38 +482,37 @@
         </div>
       </div>
       <div style="margin-top:2.5rem">
-        <a href="https://wa.me/923017658679?text=I'm interested in the SCS partnership program" class="btn-primary" target="_blank">Start Your Journey →</a>
+        <a href="https://wa.me/923017658679?text=I'm%20interested%20in%20the%20SCS%20partnership%20program" class="btn-primary" target="_blank" rel="noopener" aria-label="Start your SCS partner journey on WhatsApp">Start Your Journey on WhatsApp →</a>
       </div>
     </div>
-
     <div class="opp-cards reveal">
       <div class="opp-card">
-        <div class="opp-card-icon">📚</div>
+        <div class="opp-card-icon" aria-hidden="true">📚</div>
         <div class="opp-card-title">Professional Training</div>
         <div class="opp-card-desc">Certified skin consultant courses, sales training, and ongoing business development workshops.</div>
       </div>
       <div class="opp-card">
-        <div class="opp-card-icon">💰</div>
+        <div class="opp-card-icon" aria-hidden="true">💰</div>
         <div class="opp-card-title">Attractive Earnings</div>
         <div class="opp-card-desc">Competitive commission structure with bonuses, incentives, and performance rewards.</div>
       </div>
       <div class="opp-card">
-        <div class="opp-card-icon">🤝</div>
+        <div class="opp-card-icon" aria-hidden="true">🤝</div>
         <div class="opp-card-title">Community Support</div>
         <div class="opp-card-desc">A powerful network of partners, mentors, and leaders who invest in your success daily.</div>
       </div>
       <div class="opp-card">
-        <div class="opp-card-icon">🚀</div>
+        <div class="opp-card-icon" aria-hidden="true">🚀</div>
         <div class="opp-card-title">Growth Pathway</div>
         <div class="opp-card-desc">Clear career progression from Consultant to Regional Director with recognition at every stage.</div>
       </div>
       <div class="opp-card">
-        <div class="opp-card-icon">📱</div>
+        <div class="opp-card-icon" aria-hidden="true">📱</div>
         <div class="opp-card-title">Digital Tools</div>
         <div class="opp-card-desc">Website, social media support, and digital marketing resources to grow your personal brand.</div>
       </div>
       <div class="opp-card">
-        <div class="opp-card-icon">🎓</div>
+        <div class="opp-card-icon" aria-hidden="true">🎓</div>
         <div class="opp-card-title">Seminars & Events</div>
         <div class="opp-card-desc">Regular national seminars, launches, and award ceremonies across Pakistan to celebrate your wins.</div>
       </div>
@@ -491,110 +520,125 @@
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     COUNTERS
+COUNTERS
 ════════════════════════════════════════════ -->
-<div class="counters-section reveal">
+<div class="counters-section" id="countersSection" aria-label="SCS brand statistics">
   <div class="counters-grid">
     <div class="counter-item">
-      <div class="counter-num" data-target="50000">0</div>
+      <div class="counter-num" data-target="50000" data-suffix="+" aria-live="polite">50,000+</div>
       <div class="counter-label">Happy Customers</div>
     </div>
-    <div class="counter-divider"></div>
+    <div class="counter-divider" aria-hidden="true"></div>
     <div class="counter-item">
-      <div class="counter-num" data-target="5000">0</div>
+      <div class="counter-num" data-target="5000" data-suffix="+" aria-live="polite">5,000+</div>
       <div class="counter-label">Active Partners</div>
     </div>
-    <div class="counter-divider"></div>
+    <div class="counter-divider" aria-hidden="true"></div>
     <div class="counter-item">
-      <div class="counter-num" data-target="150">0</div>
+      <div class="counter-num" data-target="150" data-suffix="+" aria-live="polite">150+</div>
       <div class="counter-label">Cities Reached</div>
     </div>
-    <div class="counter-divider"></div>
+    <div class="counter-divider" aria-hidden="true"></div>
     <div class="counter-item">
-      <div class="counter-num" data-target="20">0</div>
+      <div class="counter-num" data-target="20" data-suffix="+" aria-live="polite">20+</div>
       <div class="counter-label">Signature Products</div>
     </div>
   </div>
 </div>
 
-
 <!-- ════════════════════════════════════════════
-     BLOG / BEAUTY TIPS
+BLOG / BEAUTY TIPS
 ════════════════════════════════════════════ -->
-<section class="blog-section" id="blog">
+<section class="blog-section" id="blog" aria-labelledby="blog-heading">
   <div class="blog-header reveal">
     <div class="section-tag">Beauty Knowledge</div>
-    <h2 class="section-title">Your <em>Glow</em> Guide</h2>
+    <h2 class="section-title" id="blog-heading">Your <em>Glow</em> Guide</h2>
     <p class="section-sub">Expert skincare tips, beauty rituals, and wellness advice curated by SCS certified skin consultants.</p>
   </div>
   <div class="blog-grid">
-    <div class="blog-card reveal">
-      <div class="blog-img blog-img-1">🌸</div>
+    <article class="blog-card reveal">
+      <div class="blog-img blog-img-1" aria-hidden="true">🌸</div>
       <div class="blog-body">
         <div class="blog-tag">Skincare Tips</div>
-        <div class="blog-title">The Ultimate Guide to Building a Morning Skincare Routine for South Asian Skin</div>
-        <div class="blog-excerpt">Discover how to layer your SCS serums and creams for maximum glow and protection throughout your day.</div>
-        <div class="blog-meta"><span>5 min read</span><span>•</span><span>Skincare</span></div>
+        <h3 class="blog-title">The Ultimate Guide to Building a Morning Skincare Routine for South Asian Skin</h3>
+        <p class="blog-excerpt">Discover how to layer your SCS serums and creams for maximum glow and protection throughout your day.</p>
+        <div class="blog-meta">
+          <span>5 min read</span><span aria-hidden="true">•</span><span>Skincare</span>
+        </div>
+        <a href="https://wa.me/923017658679?text=Hi!%20I'd%20like%20to%20learn%20about%20morning%20skincare%20routines%20for%20South%20Asian%20skin" class="blog-read-btn" target="_blank" rel="noopener" aria-label="Ask our consultant about morning skincare routines">Ask Our Consultant →</a>
       </div>
-    </div>
-    <div class="blog-card reveal">
-      <div class="blog-img blog-img-2">💛</div>
+    </article>
+    <article class="blog-card reveal">
+      <div class="blog-img blog-img-2" aria-hidden="true">💛</div>
       <div class="blog-body">
         <div class="blog-tag">Ingredients</div>
-        <div class="blog-title">Why Vitamin C is the Most Powerful Ingredient for Brightening Pakistani Skin</div>
-        <div class="blog-excerpt">A deep dive into how Vitamin C fights hyperpigmentation, boosts collagen, and gives you that glass-skin glow.</div>
-        <div class="blog-meta"><span>7 min read</span><span>•</span><span>Ingredients</span></div>
+        <h3 class="blog-title">Why Vitamin C is the Most Powerful Ingredient for Brightening Pakistani Skin</h3>
+        <p class="blog-excerpt">A deep dive into how Vitamin C fights hyperpigmentation, boosts collagen, and gives you that glass-skin glow.</p>
+        <div class="blog-meta">
+          <span>7 min read</span><span aria-hidden="true">•</span><span>Ingredients</span>
+        </div>
+        <a href="https://wa.me/923017658679?text=Hi!%20I%20want%20to%20know%20more%20about%20the%20SCS%20Vitamin%20C%20Serum" class="blog-read-btn" target="_blank" rel="noopener" aria-label="Learn more about our Vitamin C Serum on WhatsApp">Learn More →</a>
       </div>
-    </div>
-    <div class="blog-card reveal">
-      <div class="blog-img blog-img-3">✨</div>
+    </article>
+    <article class="blog-card reveal">
+      <div class="blog-img blog-img-3" aria-hidden="true">✨</div>
       <div class="blog-body">
         <div class="blog-tag">Wellness</div>
-        <div class="blog-title">5 Self-Care Rituals That Will Transform Your Skin and Your Confidence</div>
-        <div class="blog-excerpt">Holistic beauty habits that go beyond products — from sleep hygiene to diet tips for glowing skin from within.</div>
-        <div class="blog-meta"><span>6 min read</span><span>•</span><span>Wellness</span></div>
+        <h3 class="blog-title">5 Self-Care Rituals That Will Transform Your Skin and Your Confidence</h3>
+        <p class="blog-excerpt">Holistic beauty habits that go beyond products — from sleep hygiene to diet tips for glowing skin from within.</p>
+        <div class="blog-meta">
+          <span>6 min read</span><span aria-hidden="true">•</span><span>Wellness</span>
+        </div>
+        <a href="https://wa.me/923017658679?text=Hi!%20I'd%20like%20a%20personalised%20skincare%20routine%20from%20SCS" class="blog-read-btn" target="_blank" rel="noopener" aria-label="Get a personalised skincare routine on WhatsApp">Get Your Routine →</a>
       </div>
-    </div>
+    </article>
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     CTA / CONTACT
+CTA / CONTACT
 ════════════════════════════════════════════ -->
-<section class="cta-section" id="contact">
+<section class="cta-section" id="contact" aria-labelledby="contact-heading">
   <div class="reveal">
     <div class="section-tag" style="justify-content:center"><span>Begin Your Journey</span></div>
-    <h2 class="section-title">Ready to <em>Glow</em>?</h2>
+    <h2 class="section-title" id="contact-heading">Ready to <em>Glow</em>?</h2>
     <p class="section-sub">Join thousands of radiant women across Pakistan who have discovered their most beautiful, confident selves with SCS.</p>
     <div class="cta-btns">
-      <a href="https://wa.me/923017658679?text=Hi! I want to order SCS products" class="btn-primary" target="_blank">Order on WhatsApp</a>
-      <a href="https://wa.me/923017658679?text=Hi! I'm interested in becoming an SCS partner" class="btn-secondary" target="_blank">Become a Partner</a>
+      <a href="https://wa.me/923017658679?text=Hi!%20I%20want%20to%20order%20SCS%20products" class="btn-primary" target="_blank" rel="noopener" aria-label="Order SCS products on WhatsApp">Order on WhatsApp</a>
+      <a href="https://wa.me/923017658679?text=Hi!%20I'm%20interested%20in%20becoming%20an%20SCS%20partner" class="btn-secondary" target="_blank" rel="noopener" aria-label="Enquire about becoming an SCS partner">Become a Partner</a>
     </div>
-    <div class="newsletter-row">
-      <input type="email" placeholder="Enter your email for beauty tips...">
-      <button onclick="subscribeNewsletter()">Subscribe</button>
+    <div class="newsletter-row" role="form" aria-label="Newsletter subscription">
+      <label for="newsletterEmail" class="sr-only">Your email address</label>
+      <input type="email" id="newsletterEmail" placeholder="Enter your email for beauty tips..." autocomplete="email" aria-required="true">
+      <button type="button" onclick="subscribeNewsletter()" aria-label="Subscribe to SCS newsletter">Subscribe</button>
     </div>
-    <p style="font-size:0.72rem;color:#aaa;margin-top:0.75rem;">No spam. Just beauty tips, launches & exclusive offers.</p>
+    <p id="newsletter-msg" role="status" aria-live="polite" style="font-size:0.82rem;margin-top:0.75rem;min-height:1.2em;"></p>
+    <p style="font-size:0.72rem;color:#aaa;margin-top:0.25rem;">No spam. Just beauty tips, launches & exclusive offers.</p>
   </div>
 </section>
 
-
 <!-- ════════════════════════════════════════════
-     FOOTER
+FOOTER
 ════════════════════════════════════════════ -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="#" class="nav-logo">Success Chaser <span>Stars</span></a>
+      <a href="#" class="nav-logo" aria-label="Success Chaser Stars — Home">Success Chaser <span>Stars</span></a>
       <p>Pakistan's premier organic beauty and wellness brand. Empowering women through transformative skincare and meaningful entrepreneurship.</p>
       <div class="footer-socials">
-        <a href="https://www.instagram.com/scs_skin.care/" class="social-btn" target="_blank" title="Instagram">📸</a>
-        <a href="https://www.facebook.com/SuccessChaserStars/" class="social-btn" target="_blank" title="Facebook">💙</a>
-        <a href="https://wa.me/923017658679" class="social-btn" target="_blank" title="WhatsApp">💬</a>
-        <a href="https://www.tiktok.com/@successchaserstar" class="social-btn" target="_blank" title="TikTok">🎵</a>
+        <a href="https://www.instagram.com/scs_skin.care/" class="social-btn" target="_blank" rel="noopener" aria-label="SCS Beauty on Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://www.facebook.com/SuccessChaserStars/" class="social-btn" target="_blank" rel="noopener" aria-label="SCS Beauty on Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://wa.me/923017658679" class="social-btn" target="_blank" rel="noopener" aria-label="Contact SCS Beauty on WhatsApp">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@successchaserstar" class="social-btn" target="_blank" rel="noopener" aria-label="SCS Beauty on TikTok">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+        </a>
       </div>
     </div>
     <div class="footer-col">
@@ -622,35 +666,39 @@
     <div class="footer-col">
       <h4>Contact</h4>
       <ul>
-        <li><a href="https://wa.me/923017658679" target="_blank">WhatsApp: +92 301 765 8679</a></li>
+        <li><a href="https://wa.me/923017658679" target="_blank" rel="noopener">WhatsApp: +92 301 765 8679</a></li>
         <li><a href="mailto:shahzebali0202@gmail.com">shahzebali0202@gmail.com</a></li>
-        <li><a href="#">Khanpur & Rawalpindi</a></li>
-        <li><a href="#">Wah Cantt, Pakistan</a></li>
-        <li><a href="#">Open 24/7 — Always Here</a></li>
+        <li><span>Khanpur & Rawalpindi</span></li>
+        <li><span>Wah Cantt, Pakistan</span></li>
+        <li><span>Open 24/7 — Always Here</span></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <p>© 2025 Success Chaser Stars. All rights reserved. Pakistan's Fastest Growing Direct Selling Company.</p>
-    <p><a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Delivery Policy</a></p>
+    <p>
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="terms.html">Terms &amp; Conditions</a> ·
+      <a href="delivery.html">Delivery Policy</a>
+    </p>
   </div>
 </footer>
 
-
 <!-- ════════════════════════════════════════════
-     STICKY CTA BUTTONS
+STICKY CTA BUTTONS
 ════════════════════════════════════════════ -->
-<div class="sticky-cta">
-  <a href="https://wa.me/923017658679?text=Hi! I want to enquire about SCS products" class="sticky-btn" target="_blank">💬 WhatsApp Us</a>
-  <a href="#products" class="sticky-btn sticky-btn-shop">✦ Shop Now</a>
+<div class="sticky-cta" role="complementary" aria-label="Quick contact buttons">
+  <a href="https://wa.me/923017658679?text=Hi!%20I%20want%20to%20enquire%20about%20SCS%20products" class="sticky-btn" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    WhatsApp Us
+  </a>
+  <a href="#products" class="sticky-btn sticky-btn-shop" aria-label="Jump to products section">✦ Shop Now</a>
 </div>
 
-
 <!-- ════════════════════════════════════════════
-     SCRIPTS (load order matters)
+SCRIPTS
 ════════════════════════════════════════════ -->
 <script src="js/products.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 </html>
