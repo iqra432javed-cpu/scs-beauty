@@ -1,491 +1,938 @@
+cat > /mnt/user-data/outputs/shop.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop — SCS Beauty | Pakistan's Premium Skincare</title>
-  <meta name="description" content="Shop SCS organic serums, beauty creams, skin polish and more. Cash on delivery all over Pakistan.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <style>
-    /* ── SHOP PAGE SPECIFIC STYLES ── */
-    .page-hero {
-      padding: 140px 5vw 80px;
-      background: linear-gradient(135deg, #FDF8F8 0%, #FAF5F0 50%, #F5E8E0 100%);
-      position: relative; overflow: hidden;
-      text-align: center;
-    }
-    .page-hero::before {
-      content: '✦'; position: absolute; font-size: 28rem; opacity: 0.03;
-      top: -8rem; right: -6rem; color: var(--rose-gold); line-height: 1; pointer-events: none;
-    }
-    .page-hero-tag {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em;
-      text-transform: uppercase; color: var(--champagne);
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      margin-bottom: 1.2rem;
-    }
-    .page-hero-tag::before, .page-hero-tag::after {
-      content: ''; width: 28px; height: 1px; background: var(--champagne);
-    }
-    .page-hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 500;
-      color: var(--text-dark); line-height: 1.1; margin-bottom: 1rem;
-    }
-    .page-hero h1 em { font-style: italic; color: var(--rose-gold); }
-    .page-hero p {
-      font-size: 1rem; color: #888; max-width: 500px;
-      margin: 0 auto; line-height: 1.8;
-    }
+<!-- ═══════════════════════════════════════════════════════
+     SCS BEAUTY — shop.html  (PRODUCTION REWRITE)
 
-    /* ── SHOP TOOLBAR ── */
-    .shop-toolbar {
-      padding: 2rem 5vw;
-      background: white;
-      border-bottom: 1px solid var(--border-light);
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 1.5rem; flex-wrap: wrap;
-      position: sticky; top: 72px; z-index: 100;
-    }
-    .filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .filter-tab {
-      padding: 0.5rem 1.2rem; border-radius: 50px;
-      border: 1px solid var(--border-light);
-      font-size: 0.78rem; font-weight: 500; cursor: pointer;
-      background: white; color: #888;
-      transition: all 0.2s;
-    }
-    .filter-tab:hover, .filter-tab.active {
-      background: var(--rose-gold); color: white; border-color: var(--rose-gold);
-    }
-    .shop-search {
-      display: flex; align-items: center; gap: 0.75rem;
-      background: var(--soft-bg); border: 1px solid var(--border-light);
-      border-radius: 50px; padding: 0.5rem 1.2rem;
-      min-width: 240px;
-    }
-    .shop-search input {
-      border: none; outline: none; background: transparent;
-      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--text-dark);
-      width: 100%;
-    }
-    .shop-search input::placeholder { color: #bbb; }
-    .search-icon { color: #bbb; font-size: 0.9rem; }
-    .results-count { font-size: 0.78rem; color: #aaa; white-space: nowrap; }
+     FIXES vs original:
+     01. Added canonical, og:*, twitter:card meta tags
+     02. Added robots meta tag
+     03. Dropped Cormorant Garamond — 2 font families only
+     04. Added display=swap + preconnect for fonts
+     05. Added favicon links
+     06. Added JSON-LD BreadcrumbList schema
+     07. Added skip-to-content link
+     08. Hamburger div → button with aria-expanded
+     09. All external links get rel="noopener noreferrer"
+     10. All decorative emojis get aria-hidden="true"
+     11. Shop grid uses role="list" / cards use role="listitem"
+     12. Filter tabs are now <button> elements (not divs)
+     13. Search input has associated <label class="sr-only">
+     14. Added "clear filter" button when filter is active
+     15. Category pre-selection from sessionStorage
+         (set by homepage category cards)
+     16. orderProduct() exposed globally from products.js
+     17. Empty state has keyboard-accessible reset button
+     18. Trust strip icons use aria-hidden="true"
+     19. How-to-order steps use <ol> for semantic order
+     20. footer policy links point to real pages
+     21. Copyright year dynamic
+     22. Sticky CTA is full-width bar on mobile
+     23. Added :focus-visible + .sr-only from style.css
+     24. Results count uses aria-live="polite"
+     ════════════════════════════════════════════════════════ -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    /* ── SHOP GRID ── */
-    .shop-main { padding: 3rem 5vw 6rem; }
-    .shop-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 1.75rem;
-    }
+<style>
+/* Skip link — must be first */
+.skip-link {
+  position: absolute; top: -100%; left: 0;
+  background: #8B4A56; color: #fff;
+  padding: 10px 20px; font-size: 14px; font-weight: 600;
+  text-decoration: none; z-index: 99999;
+  border-radius: 0 0 8px 0; transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }
+</style>
 
-    /* ── PRODUCT CARD EXTENDED ── */
-    .shop-card {
-      background: white; border-radius: 22px; overflow: hidden;
-      border: 1px solid var(--border-light);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer; position: relative;
-    }
-    .shop-card:hover {
-      transform: translateY(-7px);
-      box-shadow: 0 24px 55px rgba(183, 110, 121, 0.15);
-    }
-    .shop-card-img {
-      aspect-ratio: 1/1;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 5.5rem; position: relative; overflow: hidden;
-    }
-    .shop-card-img::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.05));
-    }
-    .shop-card-badge {
-      position: absolute; top: 16px; left: 16px; z-index: 1;
-      background: var(--champagne); color: #5A3A0A;
-      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 4px 10px; border-radius: 50px;
-    }
-    .badge-hot { background: var(--rose-gold); color: white; }
-    .badge-new { background: #6DB88B; color: white; }
-    .shop-card-wishlist {
-      position: absolute; top: 14px; right: 14px; z-index: 1;
-      width: 34px; height: 34px; border-radius: 50%;
-      background: rgba(255,255,255,0.9);
-      border: 1px solid var(--border-light);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
-    }
-    .shop-card-wishlist:hover { background: var(--soft-blush); }
-    .shop-card-body { padding: 1.5rem; }
-    .shop-card-cat {
-      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted-rose); margin-bottom: 0.45rem;
-    }
-    .shop-card-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem; font-weight: 500; line-height: 1.3;
-      color: var(--text-dark); margin-bottom: 0.45rem;
-    }
-    .shop-card-desc { font-size: 0.78rem; color: #aaa; line-height: 1.65; margin-bottom: 1rem; }
-    .shop-card-stars { color: var(--champagne); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 1rem; }
-    .shop-card-footer { display: flex; align-items: center; justify-content: space-between; }
-    .shop-card-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: 600; color: var(--rose-gold);
-    }
-    .shop-card-price small {
-      font-size: 0.68rem; color: #bbb; font-family: 'Inter', sans-serif;
-      font-weight: 400; display: block;
-    }
-    .shop-order-btn {
-      background: var(--rose-gold); color: white;
-      border: none; border-radius: 50px;
-      padding: 0.6rem 1.3rem;
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
-      cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .shop-order-btn:hover { background: var(--deep-rose); transform: scale(1.04); }
+<!-- ═══ TITLE & META ═══ -->
+<title>Shop Organic Skincare — SCS Beauty | Pakistan</title>
+<meta name="description" content="Shop SCS organic serums, beauty creams, skin polish and more. Cash on delivery all over Pakistan. Browse 8+ premium skincare products.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://iqra432javed-cpu.github.io/scs-beauty/shop.html">
 
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      grid-column: 1 / -1;
-      text-align: center; padding: 4rem 2rem;
-      color: #bbb;
-    }
-    .empty-state-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .empty-state p { font-size: 0.9rem; }
+<!-- ═══ OPEN GRAPH ═══ -->
+<meta property="og:title" content="Shop Organic Skincare — Success Chaser Stars">
+<meta property="og:description" content="Browse SCS organic serums, beauty creams, skin polish and more. COD all over Pakistan.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://iqra432javed-cpu.github.io/scs-beauty/shop.html">
+<meta property="og:image" content="https://iqra432javed-cpu.github.io/scs-beauty/assets/images/og-image.jpg">
+<meta property="og:site_name" content="Success Chaser Stars">
 
-    /* ── PROMO BANNER ── */
-    .promo-banner {
-      background: linear-gradient(135deg, var(--rose-gold), var(--deep-rose));
-      padding: 2rem 5vw;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 2rem; flex-wrap: wrap;
-    }
-    .promo-text { color: white; }
-    .promo-text h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; font-weight: 500; margin-bottom: 0.35rem;
-    }
-    .promo-text p { font-size: 0.85rem; opacity: 0.85; }
-    .promo-badge {
-      background: var(--champagne); color: #5A3A0A;
-      padding: 0.5rem 1.5rem; border-radius: 50px;
-      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em;
-      white-space: nowrap;
-    }
+<!-- ═══ TWITTER CARD ═══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shop Organic Skincare — SCS Beauty Pakistan">
+<meta name="twitter:image" content="https://iqra432javed-cpu.github.io/scs-beauty/assets/images/og-image.jpg">
 
-    /* ── HOW TO ORDER ── */
-    .how-section {
-      background: var(--warm-ivory); padding: 5rem 5vw;
-    }
-    .how-steps {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 2rem; margin-top: 3rem;
-    }
-    .how-step { text-align: center; padding: 1.5rem; }
-    .how-num {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--soft-blush);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: 600; color: var(--rose-gold);
-      margin: 0 auto 1rem;
-    }
-    .how-title { font-weight: 600; font-size: 0.9rem; color: var(--text-dark); margin-bottom: 0.4rem; }
-    .how-desc { font-size: 0.78rem; color: #aaa; line-height: 1.7; }
+<!-- ═══ FAVICON ═══ -->
+<link rel="icon" type="image/png" href="assets/icons/favicon.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 
-    /* ── TRUST STRIP ── */
-    .trust-strip {
-      background: white; padding: 2rem 5vw;
-      border-top: 1px solid var(--border-light);
-      border-bottom: 1px solid var(--border-light);
-      display: flex; align-items: center; justify-content: center;
-      gap: 3rem; flex-wrap: wrap;
+<!-- ═══ JSON-LD: BreadcrumbList ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://iqra432javed-cpu.github.io/scs-beauty/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Shop",
+      "item": "https://iqra432javed-cpu.github.io/scs-beauty/shop.html"
     }
-    .trust-item {
-      display: flex; align-items: center; gap: 0.75rem;
-      font-size: 0.82rem; color: #888;
-    }
-    .trust-item-icon { font-size: 1.4rem; }
-    .trust-item strong { color: var(--text-dark); display: block; font-size: 0.85rem; }
+  ]
+}
+</script>
 
-    @media (max-width: 768px) {
-      .shop-toolbar { position: static; flex-direction: column; align-items: stretch; }
-      .shop-search { min-width: unset; }
-      .how-steps { grid-template-columns: 1fr 1fr; }
-      .trust-strip { gap: 1.5rem; }
-      .promo-banner { text-align: center; justify-content: center; }
-    }
-    @media (max-width: 480px) {
-      .shop-grid { grid-template-columns: 1fr; }
-      .how-steps { grid-template-columns: 1fr; }
-    }
-  </style>
+<!-- ═══ GOOGLE FONTS — 2 families, display=swap ═══ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
+
+<style>
+/* ═══════════════════════════════════════════
+   SHOP PAGE — specific styles
+   ═══════════════════════════════════════════ */
+
+/* ── Page hero ── */
+.page-hero {
+  padding: 140px 5vw 80px;
+  background: linear-gradient(135deg, #FDF8F8 0%, #FAF5F0 50%, #F5E8E0 100%);
+  position: relative; overflow: hidden; text-align: center;
+}
+.page-hero::before {
+  content: '✦'; position: absolute; font-size: 28rem; opacity: 0.03;
+  top: -8rem; right: -6rem; color: var(--rose-gold); line-height: 1;
+  pointer-events: none; aria-hidden: true;
+}
+.page-hero-tag {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--champagne);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-bottom: 1.2rem;
+}
+.page-hero-tag::before,
+.page-hero-tag::after { content: ''; width: 28px; height: 1px; background: var(--champagne); }
+.page-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 500;
+  color: var(--text-dark); line-height: 1.1; margin-bottom: 1rem;
+}
+.page-hero h1 em { font-style: italic; color: var(--rose-gold); }
+.page-hero p { font-size: 1rem; color: #888; max-width: 500px; margin: 0 auto; line-height: 1.8; }
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  padding: 0.75rem 5vw;
+  background: white;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.78rem; color: #aaa;
+  display: flex; align-items: center; gap: 6px;
+}
+.breadcrumb a { color: var(--rose-gold); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb-sep { color: #ccc; }
+
+/* ── Trust strip ── */
+.trust-strip {
+  background: white; padding: 1.5rem 5vw;
+  border-bottom: 1px solid var(--border-light);
+  display: flex; align-items: center; justify-content: center;
+  gap: 2.5rem; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.82rem; color: #888;
+}
+.trust-item-icon { font-size: 1.4rem; }
+.trust-item strong { color: var(--text-dark); display: block; font-size: 0.85rem; }
+
+/* ── Shop toolbar ── */
+.shop-toolbar {
+  padding: 1.25rem 5vw;
+  background: white;
+  border-bottom: 1px solid var(--border-light);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.25rem; flex-wrap: wrap;
+  position: sticky; top: 72px; z-index: 100;
+}
+
+/* FIX: filter tabs are <button> elements now */
+.filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.filter-tab {
+  padding: 0.45rem 1.1rem; border-radius: 50px;
+  border: 1px solid var(--border-light);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem; font-weight: 500; cursor: pointer;
+  background: white; color: #888;
+  transition: all 0.2s;
+}
+.filter-tab:hover { background: var(--soft-blush); color: var(--rose-gold); border-color: var(--rose-gold); }
+.filter-tab.active,
+.filter-tab[aria-pressed="true"] {
+  background: var(--rose-gold); color: white; border-color: var(--rose-gold);
+}
+.filter-tab:focus-visible {
+  outline: 2px solid var(--rose-gold); outline-offset: 3px;
+}
+
+/* FIX: search input with label */
+.shop-search {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: var(--soft-bg); border: 1px solid var(--border-light);
+  border-radius: 50px; padding: 0.45rem 1.1rem; min-width: 220px;
+}
+.shop-search:focus-within {
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 0 3px rgba(183,110,121,0.12);
+}
+.shop-search input {
+  border: none; outline: none; background: transparent;
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--text-dark); width: 100%;
+}
+.shop-search input::placeholder { color: #bbb; }
+.search-icon { color: #bbb; font-size: 0.9rem; flex-shrink: 0; }
+
+/* FIX: results count uses aria-live */
+.results-count { font-size: 0.76rem; color: #aaa; white-space: nowrap; }
+
+/* ── Shop main grid ── */
+.shop-main { padding: 3rem 5vw 6rem; }
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.75rem;
+}
+
+/* ── Shop card (extends .product-card from style.css) ── */
+.shop-card {
+  background: white; border-radius: 22px; overflow: hidden;
+  border: 1px solid var(--border-light);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex; flex-direction: column;
+}
+.shop-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 24px 55px rgba(183,110,121,0.15);
+}
+.shop-card-img {
+  aspect-ratio: 1/1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5.5rem; position: relative; overflow: hidden;
+}
+.shop-card-badge {
+  position: absolute; top: 16px; left: 16px; z-index: 1;
+  background: var(--champagne); color: #5A3A0A;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 50px;
+}
+.badge-hot   { background: var(--rose-gold); color: white; }
+.badge-new   { background: #6DB88B; color: white; }
+
+.shop-card-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+.shop-card-cat {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted-rose); margin-bottom: 0.4rem;
+}
+.shop-card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; font-weight: 500; line-height: 1.3;
+  color: var(--text-dark); margin-bottom: 0.4rem;
+}
+.shop-card-stars { color: var(--champagne); font-size: 0.78rem; letter-spacing: 1px; margin-bottom: 0.6rem; }
+.shop-card-desc { font-size: 0.78rem; color: #aaa; line-height: 1.65; margin-bottom: 0.75rem; }
+
+.shop-card-benefits {
+  list-style: none; margin-bottom: 1rem; flex: 1;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.shop-card-benefits li {
+  font-size: 0.75rem; color: #666;
+  padding-left: 1.1rem; position: relative; line-height: 1.5;
+}
+.shop-card-benefits li::before {
+  content: '✓'; position: absolute; left: 0;
+  color: #1D9E75; font-weight: 700; font-size: 0.68rem;
+}
+
+.shop-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.5rem; padding-top: 0.75rem;
+  border-top: 1px solid var(--border-light); margin-top: auto;
+}
+.shop-card-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 600; color: var(--rose-gold); line-height: 1.2;
+}
+.shop-card-price small {
+  display: block; font-family: 'Inter', sans-serif;
+  font-size: 0.62rem; font-weight: 400; color: #bbb;
+}
+.shop-order-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--rose-gold); color: white;
+  border: none; border-radius: 50px;
+  padding: 0.5rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
+}
+.shop-order-btn:hover {
+  background: var(--deep-rose); transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(183,110,121,0.30);
+}
+.shop-order-btn:focus-visible {
+  outline: 2px solid var(--deep-rose); outline-offset: 3px;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: #bbb;
+}
+.empty-state-icon { font-size: 4rem; margin-bottom: 1rem; }
+.empty-state p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+.empty-state-reset {
+  background: var(--rose-gold); color: white;
+  border: none; border-radius: 50px;
+  padding: 0.6rem 1.5rem;
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s;
+}
+.empty-state-reset:hover { background: var(--deep-rose); }
+
+/* ── Active filter indicator ── */
+.active-filter-bar {
+  display: none;
+  align-items: center; gap: 0.75rem;
+  padding: 0.6rem 5vw;
+  background: var(--light-champagne);
+  font-size: 0.8rem; color: var(--text-dark);
+}
+.active-filter-bar.visible { display: flex; }
+.clear-filter-btn {
+  background: none; border: 1px solid var(--champagne);
+  border-radius: 50px; padding: 2px 10px;
+  font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+  color: var(--deep-rose); cursor: pointer; transition: all 0.2s;
+}
+.clear-filter-btn:hover { background: var(--champagne); color: white; }
+
+/* ── Promo banner ── */
+.promo-banner {
+  background: linear-gradient(135deg, var(--rose-gold), var(--deep-rose));
+  padding: 2rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.promo-text { color: white; }
+.promo-text h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 500; margin-bottom: 0.35rem;
+}
+.promo-text p { font-size: 0.85rem; opacity: 0.85; }
+.promo-badge {
+  background: var(--champagne); color: #5A3A0A;
+  padding: 0.6rem 1.5rem; border-radius: 50px;
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em;
+  text-decoration: none; white-space: nowrap;
+  transition: opacity 0.2s; display: inline-block;
+}
+.promo-badge:hover { opacity: 0.88; }
+
+/* ── How to order ── */
+.how-section { background: var(--warm-ivory); padding: 5rem 5vw; }
+.how-section .section-tag { justify-content: center; }
+.how-section .section-tag::before { display: none; }
+.how-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2rem; margin-top: 3rem;
+  list-style: none; /* it's an <ol> for semantics, styled without numbers */
+}
+.how-step { text-align: center; padding: 1.5rem; }
+.how-num {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--soft-blush);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 600; color: var(--rose-gold);
+  margin: 0 auto 1rem; flex-shrink: 0;
+}
+.how-title { font-weight: 600; font-size: 0.9rem; color: var(--text-dark); margin-bottom: 0.4rem; }
+.how-desc { font-size: 0.78rem; color: #aaa; line-height: 1.7; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .shop-toolbar { position: static; flex-direction: column; align-items: stretch; }
+  .shop-search { min-width: unset; }
+  .how-steps { grid-template-columns: 1fr 1fr; }
+  .trust-strip { gap: 1.5rem; justify-content: flex-start; }
+  .promo-banner { text-align: center; justify-content: center; }
+  .filter-tabs { gap: 0.4rem; }
+}
+@media (max-width: 480px) {
+  .shop-grid { grid-template-columns: 1fr; }
+  .how-steps { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
-<nav id="navbar">
-  <a href="index.html" class="nav-logo">Success Chaser <span>Stars</span></a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="shop.html" style="color:var(--rose-gold);opacity:1">Products</a></li>
+<!-- ═══ SKIP LINK ═══ -->
+<a class="skip-link" href="#shop-main">Skip to product grid</a>
+
+<!-- ══════════════════════════════════════════
+NAVIGATION
+══════════════════════════════════════════ -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <a href="index.html" class="nav-logo" aria-label="Success Chaser Stars — Return to homepage">
+    Success Chaser <span>Stars</span>
+  </a>
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="shop.html" aria-current="page" style="color:var(--rose-gold);opacity:1">Products</a></li>
     <li><a href="about.html">Our Story</a></li>
     <li><a href="index.html#lifestyle">Lifestyle</a></li>
     <li><a href="blog.html">Beauty Tips</a></li>
     <li><a href="index.html#contact">Contact</a></li>
     <li><a href="partner.html" class="nav-cta">Become a Partner</a></li>
   </ul>
-  <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <button
+    id="hamburger"
+    type="button"
+    class="nav-hamburger"
+    aria-label="Open navigation menu"
+    aria-expanded="false"
+    aria-controls="navLinks"
+  >
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </button>
 </nav>
 
-<!-- PAGE HERO -->
-<div class="page-hero">
-  <div class="page-hero-tag">The SCS Collection</div>
+<!-- ══════════════════════════════════════════
+BREADCRUMB
+══════════════════════════════════════════ -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="index.html">Home</a>
+  <span class="breadcrumb-sep" aria-hidden="true">›</span>
+  <span aria-current="page">Shop</span>
+</nav>
+
+<!-- ══════════════════════════════════════════
+PAGE HERO
+══════════════════════════════════════════ -->
+<header class="page-hero">
+  <div class="page-hero-tag" aria-hidden="true">The SCS Collection</div>
   <h1>Shop Your <em>Glow</em></h1>
   <p>Organic, results-driven skincare formulated for South Asian skin. Cash on delivery all over Pakistan.</p>
-</div>
+</header>
 
-<!-- TRUST STRIP -->
-<div class="trust-strip">
-  <div class="trust-item">
-    <span class="trust-item-icon">🚚</span>
+<!-- ══════════════════════════════════════════
+TRUST STRIP
+══════════════════════════════════════════ -->
+<div class="trust-strip" role="list" aria-label="Shopping guarantees">
+  <div class="trust-item" role="listitem">
+    <span class="trust-item-icon" aria-hidden="true">🚚</span>
     <div><strong>Free Delivery</strong> Orders above PKR 2,000</div>
   </div>
-  <div class="trust-item">
-    <span class="trust-item-icon">💵</span>
+  <div class="trust-item" role="listitem">
+    <span class="trust-item-icon" aria-hidden="true">💵</span>
     <div><strong>Cash on Delivery</strong> All over Pakistan</div>
   </div>
-  <div class="trust-item">
-    <span class="trust-item-icon">🔄</span>
+  <div class="trust-item" role="listitem">
+    <span class="trust-item-icon" aria-hidden="true">🔄</span>
     <div><strong>Easy Returns</strong> 7-day return policy</div>
   </div>
-  <div class="trust-item">
-    <span class="trust-item-icon">🌿</span>
+  <div class="trust-item" role="listitem">
+    <span class="trust-item-icon" aria-hidden="true">🌿</span>
     <div><strong>100% Organic</strong> No harsh chemicals</div>
   </div>
-  <div class="trust-item">
-    <span class="trust-item-icon">✅</span>
+  <div class="trust-item" role="listitem">
+    <span class="trust-item-icon" aria-hidden="true">✅</span>
     <div><strong>Certified Safe</strong> Dermatologist tested</div>
   </div>
 </div>
 
-<!-- SHOP TOOLBAR -->
-<div class="shop-toolbar">
-  <div class="filter-tabs" id="filterTabs">
-    <button class="filter-tab active" onclick="filterShop('all', this)">All Products</button>
-    <button class="filter-tab" onclick="filterShop('Serums', this)">Serums</button>
-    <button class="filter-tab" onclick="filterShop('Creams', this)">Creams</button>
-    <button class="filter-tab" onclick="filterShop('Sun Protection', this)">Sun Protection</button>
-    <button class="filter-tab" onclick="filterShop('Polish & Exfoliation', this)">Polish</button>
-    <button class="filter-tab" onclick="filterShop('Treatments', this)">Treatments</button>
+<!-- ══════════════════════════════════════════
+SHOP TOOLBAR
+FIX: filter-tabs use <button>, search has <label>
+══════════════════════════════════════════ -->
+<div class="shop-toolbar" role="search" aria-label="Filter and search products">
+  <div class="filter-tabs" role="group" aria-label="Filter by category">
+    <button class="filter-tab active"
+            type="button"
+            data-category="all"
+            aria-pressed="true">All Products</button>
+    <button class="filter-tab"
+            type="button"
+            data-category="Serums"
+            aria-pressed="false">Serums</button>
+    <button class="filter-tab"
+            type="button"
+            data-category="Creams"
+            aria-pressed="false">Creams</button>
+    <button class="filter-tab"
+            type="button"
+            data-category="Sun Protection"
+            aria-pressed="false">Sun Protection</button>
+    <button class="filter-tab"
+            type="button"
+            data-category="Polish & Exfoliation"
+            aria-pressed="false">Polish</button>
+    <button class="filter-tab"
+            type="button"
+            data-category="Treatments"
+            aria-pressed="false">Treatments</button>
   </div>
+
   <div class="shop-search">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Search products..." oninput="searchProducts(this.value)">
+    <span class="search-icon" aria-hidden="true">🔍</span>
+    <label for="searchInput" class="sr-only">Search products by name or description</label>
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search products..."
+      autocomplete="off"
+      aria-label="Search products"
+    >
   </div>
-  <span class="results-count" id="resultsCount">8 products</span>
+
+  <!-- FIX: results count is aria-live so screen readers announce changes -->
+  <span class="results-count"
+        id="resultsCount"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true">
+    8 products
+  </span>
 </div>
 
-<!-- SHOP GRID -->
-<div class="shop-main">
-  <div class="shop-grid" id="shopGrid">
-    <!-- Rendered by JS -->
-  </div>
+<!-- Active filter indicator with clear button -->
+<div class="active-filter-bar" id="activeFilterBar" role="status" aria-live="polite">
+  <span>Showing: <strong id="activeFilterLabel"></strong></span>
+  <button class="clear-filter-btn"
+          type="button"
+          id="clearFilterBtn"
+          aria-label="Clear category filter and show all products">
+    × Clear filter
+  </button>
 </div>
 
-<!-- PROMO BANNER -->
-<div class="promo-banner">
+<!-- ══════════════════════════════════════════
+SHOP GRID
+══════════════════════════════════════════ -->
+<main id="shop-main">
+  <div class="shop-main">
+    <div class="shop-grid"
+         id="shopGrid"
+         role="list"
+         aria-label="SCS product collection"
+         aria-live="polite"
+         aria-atomic="false">
+      <!-- Rendered by JS below -->
+    </div>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════
+PROMO BANNER
+══════════════════════════════════════════ -->
+<div class="promo-banner" role="complementary" aria-label="Special offer">
   <div class="promo-text">
-    <h3>Order via WhatsApp & Save 10%</h3>
+    <h2>Order via WhatsApp &amp; Save 10%</h2>
     <p>Mention code <strong>SCS10</strong> when ordering directly on WhatsApp. Limited time offer.</p>
   </div>
-  <a href="https://wa.me/923017658679?text=Hi! I want to order. Code: SCS10" class="promo-badge" target="_blank">
-    💬 Order Now & Save
+  <a href="https://wa.me/923017658679?text=Hi%21%20I%20want%20to%20order.%20Code%3A%20SCS10"
+     class="promo-badge"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Order on WhatsApp and save 10% with code SCS10">
+    Order Now &amp; Save →
   </a>
 </div>
 
-<!-- HOW TO ORDER -->
-<section class="how-section">
+<!-- ══════════════════════════════════════════
+HOW TO ORDER
+FIX: changed div.how-steps to ol for semantic ordering
+══════════════════════════════════════════ -->
+<section class="how-section" aria-label="How to order SCS products">
   <div style="text-align:center; margin-bottom:0">
     <div class="page-hero-tag">Simple Process</div>
     <h2 class="section-title" style="text-align:center">How to <em>Order</em></h2>
   </div>
-  <div class="how-steps">
-    <div class="how-step reveal">
-      <div class="how-num">1</div>
+  <ol class="how-steps" aria-label="4-step ordering process">
+    <li class="how-step reveal">
+      <div class="how-num" aria-hidden="true">1</div>
       <div class="how-title">Choose Your Product</div>
       <div class="how-desc">Browse our full collection and tap the order button on any product you love.</div>
-    </div>
-    <div class="how-step reveal">
-      <div class="how-num">2</div>
+    </li>
+    <li class="how-step reveal">
+      <div class="how-num" aria-hidden="true">2</div>
       <div class="how-title">WhatsApp Us</div>
       <div class="how-desc">You'll be taken to WhatsApp with your order pre-filled. Confirm your details with us.</div>
-    </div>
-    <div class="how-step reveal">
-      <div class="how-num">3</div>
-      <div class="how-title">Confirm & Pay</div>
+    </li>
+    <li class="how-step reveal">
+      <div class="how-num" aria-hidden="true">3</div>
+      <div class="how-title">Confirm &amp; Pay</div>
       <div class="how-desc">We confirm availability and dispatch. Cash on delivery — no advance payment needed.</div>
-    </div>
-    <div class="how-step reveal">
-      <div class="how-num">4</div>
-      <div class="how-title">Receive & Glow</div>
+    </li>
+    <li class="how-step reveal">
+      <div class="how-num" aria-hidden="true">4</div>
+      <div class="how-title">Receive &amp; Glow</div>
       <div class="how-desc">Your order arrives in 3–5 working days anywhere in Pakistan. Start your glow journey!</div>
-    </div>
-  </div>
+    </li>
+  </ol>
 </section>
 
-<!-- FOOTER -->
-<footer>
+<!-- ══════════════════════════════════════════
+FOOTER
+══════════════════════════════════════════ -->
+<footer role="contentinfo">
   <div class="footer-grid">
     <div class="footer-brand">
       <a href="index.html" class="nav-logo">Success Chaser <span>Stars</span></a>
       <p>Pakistan's premier organic beauty and wellness brand. Empowering women through transformative skincare and meaningful entrepreneurship.</p>
       <div class="footer-socials">
-        <a href="https://www.instagram.com/scs_skin.care/" class="social-btn" target="_blank">📸</a>
-        <a href="https://www.facebook.com/SuccessChaserStars/" class="social-btn" target="_blank">💙</a>
-        <a href="https://wa.me/923017658679" class="social-btn" target="_blank">💬</a>
-        <a href="https://www.tiktok.com/@successchaserstar" class="social-btn" target="_blank">🎵</a>
+        <a href="https://www.instagram.com/scs_skin.care/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Follow SCS Beauty on Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.facebook.com/SuccessChaserStars/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Follow SCS Beauty on Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://wa.me/923017658679" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Contact SCS Beauty on WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@successchaserstar" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Follow SCS Beauty on TikTok">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+        </a>
       </div>
     </div>
     <div class="footer-col">
-      <h4>Quick Links</h4>
+      <h3>Quick Links</h3>
       <ul>
-        <li><a href="shop.html">Shop All</a></li>
+        <li><a href="shop.html" aria-current="page">Shop All</a></li>
         <li><a href="about.html">Our Story</a></li>
         <li><a href="partner.html">Become a Partner</a></li>
         <li><a href="blog.html">Beauty Blog</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Categories</h4>
+      <h3>Categories</h3>
       <ul>
-        <li><a href="#" onclick="filterShop('Serums',null)">Serums</a></li>
-        <li><a href="#" onclick="filterShop('Creams',null)">Creams</a></li>
-        <li><a href="#" onclick="filterShop('Sun Protection',null)">Sun Protection</a></li>
-        <li><a href="#" onclick="filterShop('Treatments',null)">Treatments</a></li>
+        <li><button class="footer-filter-btn" type="button" onclick="setFilterFromFooter('Serums')">Serums</button></li>
+        <li><button class="footer-filter-btn" type="button" onclick="setFilterFromFooter('Creams')">Creams</button></li>
+        <li><button class="footer-filter-btn" type="button" onclick="setFilterFromFooter('Sun Protection')">Sun Protection</button></li>
+        <li><button class="footer-filter-btn" type="button" onclick="setFilterFromFooter('Treatments')">Treatments</button></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Contact</h4>
+      <h3>Contact</h3>
       <ul>
-        <li><a href="https://wa.me/923017658679" target="_blank">+92 301 765 8679</a></li>
+        <li><a href="https://wa.me/923017658679" target="_blank" rel="noopener noreferrer">+92 301 765 8679</a></li>
         <li><a href="mailto:shahzebali0202@gmail.com">shahzebali0202@gmail.com</a></li>
-        <li><a href="#">Khanpur & Rawalpindi</a></li>
-        <li><a href="#">Open 24/7</a></li>
+        <li><span>Wah Cantt, Pakistan</span></li>
+        <li><span>Open 24/7</span></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Success Chaser Stars. All rights reserved.</p>
-    <p><a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Delivery Policy</a></p>
+    <p>© <span id="copyright-year">2025</span> Success Chaser Stars. All rights reserved.</p>
+    <p>
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="terms.html">Terms &amp; Conditions</a> ·
+      <a href="delivery.html">Delivery Policy</a>
+    </p>
   </div>
 </footer>
 
-<!-- STICKY CTA -->
-<div class="sticky-cta">
-  <a href="https://wa.me/923017658679?text=Hi! I want to order SCS products" class="sticky-btn" target="_blank">💬 WhatsApp Us</a>
+<style>
+/* Footer filter buttons — styled like links */
+.footer-filter-btn {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.55); font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; text-align: left; padding: 0;
+  transition: color 0.2s;
+}
+.footer-filter-btn:hover { color: var(--rose-gold); }
+.footer-col h3 {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(255,255,255,0.9); margin-bottom: 1.25rem;
+}
+</style>
+
+<!-- ══════════════════════════════════════════
+STICKY CTA
+══════════════════════════════════════════ -->
+<div class="sticky-cta" role="complementary" aria-label="Quick contact">
+  <a href="https://wa.me/923017658679?text=Hi%21%20I%20want%20to%20order%20SCS%20products"
+     class="sticky-btn"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Contact SCS on WhatsApp to order">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    </svg>
+    WhatsApp Us
+  </a>
+  <a href="#shop-main" class="sticky-btn sticky-btn-shop" aria-label="Back to top of shop">
+    <span aria-hidden="true">↑</span> Back to Top
+  </a>
 </div>
 
+<!-- ══════════════════════════════════════════
+SCRIPTS
+══════════════════════════════════════════ -->
 <script src="js/products.js"></script>
 <script src="js/app.js"></script>
 <script>
-  // ── SHOP PAGE LOGIC ──
-  let currentFilter = 'all';
-  let currentSearch = '';
+'use strict';
 
-  function renderShopGrid(products) {
-    const grid = document.getElementById('shopGrid');
-    const count = document.getElementById('resultsCount');
-    if (!grid) return;
+/* ── Dynamic copyright year ── */
+(function() {
+  var el = document.getElementById('copyright-year');
+  if (el) el.textContent = new Date().getFullYear();
+})();
 
-    if (products.length === 0) {
-      grid.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">🔍</div>
-          <p>No products found. Try a different search or filter.</p>
-        </div>`;
-      if (count) count.textContent = '0 products';
-      return;
-    }
+/* ── Shop state ── */
+var currentFilter = 'all';
+var currentSearch = '';
 
-    const badgeClass = (badge) => {
-      if (!badge) return '';
-      if (badge === 'Bestseller') return 'badge-hot';
-      if (badge === 'New' || badge === 'New 2025') return 'badge-new';
-      return '';
-    };
+/* ── Helper: escape HTML ── */
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
-    grid.innerHTML = products.map((p, i) => `
-      <div class="shop-card reveal" style="transition-delay:${i * 0.07}s">
-        <div class="shop-card-img ${p.bg}">
-          <span>${p.icon}</span>
-          ${p.badge ? `<div class="shop-card-badge ${badgeClass(p.badge)}">${p.badge}</div>` : ''}
-          <div class="shop-card-wishlist" title="Save for later">🤍</div>
-        </div>
-        <div class="shop-card-body">
-          <div class="shop-card-cat">${p.category}</div>
-          <div class="shop-card-name">${p.name}</div>
-          <div class="shop-card-stars">★★★★★</div>
-          <div class="shop-card-desc">${p.desc}</div>
-          <div class="shop-card-footer">
-            <div class="shop-card-price">
-              PKR ${p.price.toLocaleString()}
-              <small>Cash on Delivery</small>
-            </div>
-            <button class="shop-order-btn" onclick="orderProduct(${p.id})">
-              Order →
-            </button>
-          </div>
-        </div>
-      </div>
-    `).join('');
+/* ── Badge class ── */
+function badgeClass(badge) {
+  if (!badge) return '';
+  if (badge === 'Bestseller') return 'badge-hot';
+  if (badge === 'New' || badge.indexOf('New') === 0) return 'badge-new';
+  return '';
+}
 
-    if (count) count.textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
+/* ── Build WhatsApp URL ── */
+function buildWaUrl(product) {
+  var msg = 'Hi! I want to order the '
+    + product.name + ' (PKR ' + product.price.toLocaleString() + '). '
+    + 'Please confirm availability.';
+  return 'https://wa.me/923017658679?text=' + encodeURIComponent(msg);
+}
 
-    // Re-observe for reveal
-    grid.querySelectorAll('.reveal').forEach(el => {
-      if (window.revealObserver) window.revealObserver.observe(el);
-    });
-  }
-
-  function getFiltered() {
-    return SCS_PRODUCTS.filter(p => {
-      const matchCat = currentFilter === 'all' || p.category === currentFilter;
-      const matchSearch = p.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                          p.desc.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                          p.category.toLowerCase().includes(currentSearch.toLowerCase());
-      return matchCat && matchSearch;
-    });
-  }
-
-  function filterShop(category, btn) {
-    currentFilter = category;
-    // Update active tab
-    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    renderShopGrid(getFiltered());
-    window.scrollTo({ top: document.querySelector('.shop-toolbar').offsetTop - 80, behavior: 'smooth' });
-  }
-
-  function searchProducts(val) {
-    currentSearch = val;
-    renderShopGrid(getFiltered());
-  }
-
-  // Initial render
-  document.addEventListener('DOMContentLoaded', () => {
-    renderShopGrid(SCS_PRODUCTS);
+/* ── Get filtered products ── */
+function getFiltered() {
+  return (window.SCS_PRODUCTS || []).filter(function(p) {
+    var matchCat = currentFilter === 'all' || p.category === currentFilter;
+    var q = currentSearch.toLowerCase();
+    var matchSearch = !q
+      || p.name.toLowerCase().indexOf(q) > -1
+      || p.desc.toLowerCase().indexOf(q) > -1
+      || p.category.toLowerCase().indexOf(q) > -1;
+    return matchCat && matchSearch;
   });
+}
+
+/* ── Render shop grid ── */
+function renderShopGrid(products) {
+  var grid  = document.getElementById('shopGrid');
+  var count = document.getElementById('resultsCount');
+  if (!grid) return;
+
+  if (!products || products.length === 0) {
+    grid.innerHTML = [
+      '<div class="empty-state" role="status">',
+      '  <div class="empty-state-icon" aria-hidden="true">🔍</div>',
+      '  <p>No products found for "' + esc(currentSearch || currentFilter) + '".</p>',
+      '  <button class="empty-state-reset" type="button" onclick="resetFilters()">',
+      '    Show All Products',
+      '  </button>',
+      '</div>'
+    ].join('');
+    if (count) count.textContent = '0 products';
+    return;
+  }
+
+  grid.innerHTML = products.map(function(p, i) {
+    var delay  = (i * 0.07).toFixed(2) + 's';
+    var waUrl  = buildWaUrl(p);
+    var bClass = badgeClass(p.badge);
+
+    var benefitsHtml = (p.benefits || []).map(function(b) {
+      return '<li>' + esc(b) + '</li>';
+    }).join('');
+
+    return [
+      '<article class="shop-card reveal"',
+      '  role="listitem"',
+      '  style="transition-delay:' + delay + '"',
+      '  aria-label="' + esc(p.name) + ' — PKR ' + p.price.toLocaleString() + '">',
+
+      '  <div class="shop-card-img ' + p.bg + '"',
+      '       role="img" aria-label="' + esc(p.name) + ' illustration">',
+      p.badge ? '<div class="shop-card-badge ' + bClass + '">' + esc(p.badge) + '</div>' : '',
+      '    <span aria-hidden="true">' + p.icon + '</span>',
+      '  </div>',
+
+      '  <div class="shop-card-body">',
+      '    <div class="shop-card-cat">' + esc(p.category) + '</div>',
+      '    <h3 class="shop-card-name">' + esc(p.name) + '</h3>',
+      '    <div class="shop-card-stars" aria-label="5 out of 5 stars">★★★★★</div>',
+      '    <p class="shop-card-desc">' + esc(p.desc) + '</p>',
+      benefitsHtml ? '<ul class="shop-card-benefits" aria-label="Key benefits">' + benefitsHtml + '</ul>' : '',
+      '    <div class="shop-card-footer">',
+      '      <div class="shop-card-price">',
+      '        PKR ' + p.price.toLocaleString(),
+      '        <small>Cash on Delivery</small>',
+      '      </div>',
+      '      <a href="' + waUrl + '"',
+      '         class="shop-order-btn"',
+      '         target="_blank"',
+      '         rel="noopener noreferrer"',
+      '         aria-label="Order ' + esc(p.name) + ' on WhatsApp">',
+      '        Order Now →',
+      '      </a>',
+      '    </div>',
+      '  </div>',
+      '</article>'
+    ].join('\n');
+  }).join('\n');
+
+  if (count) {
+    var n = products.length;
+    count.textContent = n + ' product' + (n !== 1 ? 's' : '');
+  }
+
+  /* Re-observe reveal elements */
+  if (window.revealObserver) {
+    grid.querySelectorAll('.reveal').forEach(function(el) {
+      window.revealObserver.observe(el);
+    });
+  }
+}
+
+/* ── Update active filter bar ── */
+function updateFilterBar() {
+  var bar   = document.getElementById('activeFilterBar');
+  var label = document.getElementById('activeFilterLabel');
+  if (!bar || !label) return;
+
+  if (currentFilter !== 'all') {
+    label.textContent = currentFilter;
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+    label.textContent = '';
+  }
+}
+
+/* ── Filter by category ── */
+function filterShop(category, btnEl) {
+  currentFilter = category || 'all';
+
+  /* Update button states */
+  document.querySelectorAll('.filter-tab').forEach(function(btn) {
+    var isActive = btn.getAttribute('data-category') === currentFilter;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
+  });
+
+  updateFilterBar();
+  renderShopGrid(getFiltered());
+
+  /* Scroll to grid top smoothly */
+  var grid = document.getElementById('shop-main');
+  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+window.filterShop = filterShop;
+
+/* ── Search ── */
+function searchProducts(val) {
+  currentSearch = val || '';
+  renderShopGrid(getFiltered());
+}
+
+/* ── Reset all filters ── */
+function resetFilters() {
+  currentFilter = 'all';
+  currentSearch = '';
+  var searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.value = '';
+  filterShop('all', null);
+}
+window.resetFilters = resetFilters;
+
+/* ── Footer category filter ── */
+function setFilterFromFooter(category) {
+  filterShop(category, null);
+  var grid = document.getElementById('shop-main');
+  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+window.setFilterFromFooter = setFilterFromFooter;
+
+/* ── Filter tab click handlers ── */
+document.querySelectorAll('.filter-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    filterShop(this.getAttribute('data-category'), this);
+  });
+});
+
+/* ── Search input handler ── */
+(function() {
+  var input = document.getElementById('searchInput');
+  if (!input) return;
+  var timeout;
+  input.addEventListener('input', function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      searchProducts(input.value);
+    }, 200); /* debounce 200ms */
+  });
+})();
+
+/* ── Clear filter button ── */
+(function() {
+  var btn = document.getElementById('clearFilterBtn');
+  if (btn) btn.addEventListener('click', function() { filterShop('all', null); });
+})();
+
+/* ── Check sessionStorage for pre-selected category
+      (set by homepage category cards) ── */
+(function checkSessionFilter() {
+  try {
+    var saved = sessionStorage.getItem('scs_filter_category');
+    if (saved) {
+      sessionStorage.removeItem('scs_filter_category');
+      /* Wait for products.js to finish rendering */
+      setTimeout(function() { filterShop(saved, null); }, 100);
+    }
+  } catch(e) { /* sessionStorage may be blocked */ }
+})();
+
+/* ── Initial render ── */
+document.addEventListener('DOMContentLoaded', function() {
+  /* Wait for products.js to set window.SCS_PRODUCTS */
+  if (window.SCS_PRODUCTS) {
+    renderShopGrid(getFiltered());
+  } else {
+    /* Fallback: wait one tick */
+    setTimeout(function() { renderShopGrid(getFiltered()); }, 50);
+  }
+});
 </script>
 </body>
 </html>
+HTMLEOF
+echo "Done. File size: $(wc -c < /mnt/user-data/outputs/shop.html) bytes, Lines: $(wc -l < /mnt/user-data/outputs/shop.html)"
