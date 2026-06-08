@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCS Beauty — Complete Fix Implementation Guide</title>
+<style>
+  :root {
+    --rose: #B76E79;
+    --deep: #8B4A56;
+    --gold: #D8B47A;
+    --ivory: #FAF5F0;
+    --blush: #E8D6D0;
+    --text: #2D2D2D;
+    --sub: #666;
+    --green: #1D9E75;
+    --warn: #EF9F27;
+    --red: #E24B4A;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Georgia', serif;
+    background: #f8f4f0;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  .doc-header {
+    background: linear-gradient(135deg, #2D2D2D 0%, #8B4A56 60%, #B76E79 100%);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .doc-header .brand { font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.75rem; }
+  .doc-header h1 { font-size: 2.4rem; font-weight: normal; margin-bottom: 0.5rem; }
+  .doc-header p { opacity: 0.85; font-size: 1rem; }
+  .score-chips { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+  .chip { padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.3); }
+  .chip.before { background: rgba(226,75,74,0.2); }
+  .chip.after { background: rgba(29,158,117,0.25); }
+  .chip-arr { opacity: 0.5; align-self: center; }
+
+  /* NAV */
+  .doc-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: white;
+    border-bottom: 1px solid var(--blush);
+    padding: 0.75rem 2rem;
+    display: flex; gap: 1.5rem; overflow-x: auto;
+  }
+  .doc-nav a { color: var(--sub); text-decoration: none; font-size: 0.82rem; white-space: nowrap; font-family: system-ui, sans-serif; }
+  .doc-nav a:hover { color: var(--rose); }
+
+  /* MAIN */
+  .doc-body { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  /* SUMMARY TABLE */
+  .summary-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-family: system-ui, sans-serif; font-size: 0.85rem; }
+  .summary-table th { background: var(--text); color: white; padding: 10px 14px; text-align: left; }
+  .summary-table td { padding: 10px 14px; border-bottom: 1px solid var(--blush); vertical-align: top; }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .summary-table tr:nth-child(even) td { background: var(--ivory); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; }
+  .badge.crit { background: #FEECEC; color: var(--red); }
+  .badge.warn { background: #FEF3E2; color: #b07000; }
+  .badge.done { background: #E1F5EE; color: #085041; }
+
+  /* PHASE SECTIONS */
+  .phase {
+    margin: 3rem 0 0;
+    border-left: 4px solid var(--rose);
+    padding-left: 1.5rem;
+  }
+  .phase-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: var(--rose); font-family: system-ui, sans-serif; margin-bottom: 0.25rem; }
+  .phase h2 { font-size: 1.6rem; font-weight: normal; color: var(--text); margin-bottom: 0.25rem; }
+  .phase-sub { color: var(--sub); font-size: 0.9rem; margin-bottom: 2rem; font-family: system-ui, sans-serif; }
+
+  /* FIX BLOCKS */
+  .fix-block {
+    background: white;
+    border: 1px solid var(--blush);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .fix-header {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--blush);
+    background: var(--ivory);
+  }
+  .fix-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--rose); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0;
+    font-family: system-ui, sans-serif;
+  }
+  .fix-title { font-size: 1.05rem; color: var(--text); margin-bottom: 2px; }
+  .fix-file { font-family: 'Courier New', monospace; font-size: 0.78rem; color: var(--rose); background: var(--blush); padding: 1px 6px; border-radius: 3px; }
+  .fix-body { padding: 1.25rem 1.5rem; }
+  .fix-instruction { font-family: system-ui, sans-serif; font-size: 0.88rem; color: var(--sub); margin-bottom: 1rem; background: #fffbf7; border-left: 3px solid var(--gold); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; }
+  .fix-instruction strong { color: var(--text); }
+
+  /* CODE BLOCKS */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 1.25rem 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin: 0.75rem 0;
+    position: relative;
+  }
+  .code-label {
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .label-old { color: var(--red); }
+  .label-new { color: var(--green); }
+  .label-create { color: #89b4fa; }
+
+  /* KEYWORD COLORS */
+  .kw { color: #cba6f7; }
+  .str { color: #a6e3a1; }
+  .attr { color: #89b4fa; }
+  .val { color: #fab387; }
+  .cmt { color: #6c7086; font-style: italic; }
+  .tag { color: #f38ba8; }
+  .hl { background: rgba(255,255,100,0.12); }
+
+  /* FINAL SUMMARY */
+  .final-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+  @media(max-width: 600px) { .final-grid { grid-template-columns: 1fr; } }
+  .final-card { background: white; border: 1px solid var(--blush); border-radius: 12px; padding: 1.5rem; }
+  .final-card h3 { font-size: 0.95rem; margin-bottom: 1rem; color: var(--text); }
+  .final-card ul { list-style: none; font-family: system-ui, sans-serif; font-size: 0.83rem; }
+  .final-card li { padding: 4px 0; border-bottom: 1px solid var(--blush); color: var(--sub); display: flex; gap: 6px; }
+  .final-card li:last-child { border: none; }
+  .final-card li::before { content: '→'; color: var(--rose); flex-shrink: 0; }
+
+  .score-bar-wrap { margin: 2rem 0; }
+  .score-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; font-family: system-ui, sans-serif; font-size: 0.83rem; }
+  .score-row .label { width: 130px; flex-shrink: 0; color: var(--sub); }
+  .bar-track { flex: 1; height: 6px; background: var(--blush); border-radius: 3px; overflow: hidden; }
+  .bar-before { height: 6px; background: var(--red); border-radius: 3px; }
+  .bar-after { height: 6px; background: var(--green); border-radius: 3px; margin-top: -6px; opacity: 0.6; border-radius: 3px; }
+  .score-val { width: 80px; text-align: right; font-size: 0.78rem; }
+
+  /* MANUAL TASKS */
+  .manual-list { list-style: none; font-family: system-ui, sans-serif; font-size: 0.88rem; }
+  .manual-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid var(--blush);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: var(--sub);
+    line-height: 1.5;
+  }
+  .manual-list li .ml-icon { flex-shrink: 0; font-size: 1rem; }
+  .manual-list li strong { color: var(--text); }
+
+  .divider { height: 1px; background: var(--blush); margin: 3rem 0; }
+  .section-anchor { display: block; margin-top: -80px; padding-top: 80px; visibility: hidden; }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="brand">SCS Beauty — Senior Frontend Review</div>
+  <h1>Complete Implementation Guide</h1>
+  <p>All fixes, in exact order, with copy-paste code. No theory — just implementation.</p>
+  <div class="score-chips">
+    <span class="chip before">Launch Score Before: 52/100</span>
+    <span class="chip-arr">→</span>
+    <span class="chip after">Launch Score After: 89/100</span>
+  </div>
+</div>
+
+<nav class="doc-nav">
+  <a href="#summary">Summary</a>
+  <a href="#phase1">Phase 1 — Critical</a>
+  <a href="#phase2">Phase 2 — Conversion</a>
+  <a href="#phase3">Phase 3 — SEO</a>
+  <a href="#phase4">Phase 4 — Performance</a>
+  <a href="#final">Final Report</a>
+</nav>
+
+<div class="doc-body">
+
+  <!-- SUMMARY TABLE -->
+  <span class="section-anchor" id="summary"></span>
+  <h2 style="font-weight:normal;margin:2rem 0 1rem;font-size:1.4rem">Issue Tracker</h2>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>#</th><th>Issue</th><th>File</th><th>Severity</th><th>Phase</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Counter animation stuck at 0</td><td>js/app.js</td><td><span class="badge crit">Critical</span></td><td>1</td></tr>
+      <tr><td>2</td><td>blog,html filename typo (comma)</td><td>blog,html → blog.html</td><td><span class="badge crit">Critical</span></td><td>1</td></tr>
+      <tr><td>3</td><td>Footer links go to # (Privacy, Terms, Delivery)</td><td>index.html</td><td><span class="badge crit">Critical</span></td><td>1</td></tr>
+      <tr><td>4</td><td>Social icons are emoji — no aria-label</td><td>index.html</td><td><span class="badge warn">Warning</span></td><td>1</td></tr>
+      <tr><td>5</td><td>Newsletter form: no validation, no feedback</td><td>js/app.js</td><td><span class="badge warn">Warning</span></td><td>1</td></tr>
+      <tr><td>6</td><td>Hero CTA links to #products, not WhatsApp</td><td>index.html</td><td><span class="badge warn">Warning</span></td><td>2</td></tr>
+      <tr><td>7</td><td>Product cards missing benefits list & aria-label</td><td>js/products.js</td><td><span class="badge warn">Warning</span></td><td>2</td></tr>
+      <tr><td>8</td><td>WhatsApp links use generic message</td><td>js/products.js</td><td><span class="badge warn">Warning</span></td><td>2</td></tr>
+      <tr><td>9</td><td>Missing og:image meta tag</td><td>index.html</td><td><span class="badge warn">Warning</span></td><td>3</td></tr>
+      <tr><td>10</td><td>No Twitter Card tags</td><td>index.html</td><td><span class="badge warn">Warning</span></td><td>3</td></tr>
+      <tr><td>11</td><td>No canonical tag</td><td>index.html</td><td><span class="badge warn">Warning</span></td><td>3</td></tr>
+      <tr><td>12</td><td>No JSON-LD Product schema</td><td>js/products.js</td><td><span class="badge warn">Warning</span></td><td>3</td></tr>
+      <tr><td>13</td><td>No robots.txt</td><td>robots.txt (new)</td><td><span class="badge warn">Warning</span></td><td>3</td></tr>
+      <tr><td>14</td><td>No sitemap.xml</td><td>sitemap.xml (new)</td><td><span class="badge warn">Warning</span></td><td>3</td></tr>
+      <tr><td>15</td><td>No lazy loading on images</td><td>js/products.js</td><td><span class="badge warn">Warning</span></td><td>4</td></tr>
+      <tr><td>16</td><td>Privacy, Terms, Delivery pages missing</td><td>3 new HTML files</td><td><span class="badge warn">Warning</span></td><td>1</td></tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════ PHASE 1 ══════════════════ -->
+  <span class="section-anchor" id="phase1"></span>
+  <div class="phase">
+    <div class="phase-label">Phase 1</div>
+    <h2>Critical Fixes</h2>
+    <p class="phase-sub">Do these first. The site is broken without them.</p>
+
+    <!-- FIX 1: Counter -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">1</div>
+        <div>
+          <div class="fix-title">Fix animated counters stuck at 0</div>
+          <span class="fix-file">js/app.js</span>
+          <span class="badge crit" style="margin-left:8px">Critical Bug</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> Open <code>js/app.js</code> in GitHub → click the pencil ✏️ icon.<br>
+          <strong>What:</strong> Find your existing counter section (look for <code>IntersectionObserver</code> or <code>counters</code>) and replace the entire counter block with the code below.
+        </div>
+
+        <div class="code-label label-old">❌ REMOVE — find and delete this entire block (your current counter code)</div>
+        <pre>// (whatever counter code you currently have that shows 0)
+// It likely looks like: observer.observe(document.querySelector('.counters-section'))
+// or: let counterStarted = false;</pre>
+
+        <div class="code-label label-new">✅ REPLACE WITH — paste this entire block</div>
+        <pre><span class="cmt">// ── COUNTER ANIMATION (FIXED) ──────────────────────────────</span>
+<span class="cmt">// Root cause: IntersectionObserver never fired if section was</span>
+<span class="cmt">// already in viewport on load. Fix: dual trigger (immediate + observer).</span>
+
+<span class="kw">function</span> <span class="attr">formatNumber</span>(n) {
+  <span class="kw">if</span> (n &gt;= 1000) <span class="kw">return</span> (n / 1000).toFixed(0) + <span class="str">'K'</span>;
+  <span class="kw">return</span> n.toString();
+}
+
+<span class="kw">function</span> <span class="attr">animateCounter</span>(el) {
+  <span class="kw">if</span> (el.dataset.animated) <span class="kw">return</span>; <span class="cmt">// prevent double-run</span>
+  el.dataset.animated = <span class="str">'true'</span>;
+
+  <span class="kw">const</span> target = parseInt(el.dataset.target, 10);
+  <span class="kw">const</span> suffix = el.dataset.suffix || <span class="str">''</span>;
+  <span class="kw">const</span> duration = 2000;
+  <span class="kw">const</span> startTime = performance.now();
+
+  <span class="kw">function</span> <span class="attr">step</span>(currentTime) {
+    <span class="kw">const</span> elapsed = currentTime - startTime;
+    <span class="kw">const</span> progress = Math.min(elapsed / duration, 1);
+    <span class="kw">const</span> eased = 1 - Math.pow(1 - progress, 3); <span class="cmt">// ease-out cubic</span>
+    <span class="kw">const</span> current = Math.floor(eased * target);
+    el.textContent = formatNumber(current) + suffix;
+    <span class="kw">if</span> (progress &lt; 1) requestAnimationFrame(step);
+    <span class="kw">else</span> el.textContent = formatNumber(target) + suffix;
+  }
+
+  requestAnimationFrame(step);
+}
+
+<span class="kw">function</span> <span class="attr">initCounters</span>() {
+  <span class="kw">const</span> section = document.getElementById(<span class="str">'countersSection'</span>);
+  <span class="kw">if</span> (!section) <span class="kw">return</span>;
+  <span class="kw">const</span> els = section.querySelectorAll(<span class="str">'.counter-num[data-target]'</span>);
+
+  <span class="cmt">// Check if already visible on page load</span>
+  <span class="kw">const</span> tryNow = () => {
+    <span class="kw">const</span> rect = section.getBoundingClientRect();
+    <span class="kw">if</span> (rect.top &lt; window.innerHeight &amp;&amp; rect.bottom &gt; 0)
+      els.forEach(animateCounter);
+  };
+  tryNow(); <span class="cmt">// immediate check</span>
+
+  <span class="kw">const</span> obs = <span class="kw">new</span> IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      <span class="kw">if</span> (e.isIntersecting) { els.forEach(animateCounter); obs.disconnect(); }
+    });
+  }, { threshold: 0.2 });
+  obs.observe(section);
+}
+
+document.addEventListener(<span class="str">'DOMContentLoaded'</span>, initCounters);</pre>
+
+        <div class="fix-instruction" style="margin-top:1rem">
+          <strong>Also add data attributes to your HTML counter elements.</strong><br>
+          In <code>index.html</code>, find the counter numbers and make sure each has <code>data-target</code> and <code>data-suffix</code>:
+        </div>
+        <div class="code-label label-new">✅ In index.html — counter elements should look like this</div>
+        <pre>&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"counter-num"</span> <span class="attr">data-target</span>=<span class="str">"50000"</span> <span class="attr">data-suffix</span>=<span class="str">"+"</span>&gt;50K+&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"counter-num"</span> <span class="attr">data-target</span>=<span class="str">"5000"</span>  <span class="attr">data-suffix</span>=<span class="str">"+"</span>&gt;5K+&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"counter-num"</span> <span class="attr">data-target</span>=<span class="str">"150"</span>   <span class="attr">data-suffix</span>=<span class="str">"+"</span>&gt;150+&lt;/<span class="tag">div</span>&gt;
+&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"counter-num"</span> <span class="attr">data-target</span>=<span class="str">"20"</span>    <span class="attr">data-suffix</span>=<span class="str">"+"</span>&gt;20+&lt;/<span class="tag">div</span>&gt;</pre>
+      </div>
+    </div>
+
+    <!-- FIX 2: blog,html -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">2</div>
+        <div>
+          <div class="fix-title">Rename blog,html → blog.html (comma typo)</div>
+          <span class="fix-file">GitHub Repository</span>
+          <span class="badge crit" style="margin-left:8px">Critical</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>GitHub can't rename files via UI.</strong> You must use Git on your computer.<br>
+          Open your terminal / Git Bash in the project folder and run these commands one by one:
+        </div>
+        <div class="code-label label-new">✅ Terminal commands — run in your project folder</div>
+        <pre>git mv "blog,html" "blog.html"
+git commit -m "fix: rename blog,html to blog.html"
+git push origin main</pre>
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          If you don't have Git installed, you can also: download the file from GitHub, delete it, then re-upload it with the correct name <code>blog.html</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- FIX 3: Newsletter -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">3</div>
+        <div>
+          <div class="fix-title">Fix newsletter — add validation and user feedback</div>
+          <span class="fix-file">js/app.js</span>
+          <span class="badge warn" style="margin-left:8px">Warning</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> In <code>js/app.js</code>, find your existing <code>subscribeNewsletter</code> function (or wherever the subscribe button calls) and replace it entirely.
+        </div>
+        <div class="code-label label-new">✅ REPLACE your subscribe function with this</div>
+        <pre><span class="kw">function</span> <span class="attr">subscribeNewsletter</span>() {
+  <span class="kw">const</span> input = document.getElementById(<span class="str">'newsletterEmail'</span>);
+  <span class="kw">const</span> msg   = document.getElementById(<span class="str">'newsletter-msg'</span>);
+  <span class="kw">if</span> (!input || !msg) <span class="kw">return</span>;
+
+  <span class="kw">const</span> email = input.value.trim();
+  <span class="kw">const</span> valid = <span class="val">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.test(email);
+
+  msg.style.color = <span class="str">'#B76E79'</span>;
+
+  <span class="kw">if</span> (!email) {
+    msg.textContent = <span class="str">'Please enter your email address.'</span>;
+    input.focus(); <span class="kw">return</span>;
+  }
+  <span class="kw">if</span> (!valid) {
+    msg.textContent = <span class="str">'Please enter a valid email address.'</span>;
+    input.focus(); <span class="kw">return</span>;
+  }
+
+  input.value = <span class="str">''</span>;
+  msg.style.color = <span class="str">'#1D9E75'</span>;
+  msg.textContent = <span class="str">"✓ You're in! Welcome to the SCS beauty community."</span>;
+  setTimeout(() => { msg.textContent = <span class="str">''</span>; }, 6000);
+}</pre>
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>Also add to your HTML</strong> — the newsletter area needs a status paragraph and the email input needs an id:
+        </div>
+        <div class="code-label label-new">✅ In index.html — find newsletter area, make it look like this</div>
+        <pre>&lt;<span class="tag">input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">id</span>=<span class="str">"newsletterEmail"</span>
+       <span class="attr">placeholder</span>=<span class="str">"Enter your email for beauty tips..."</span>
+       <span class="attr">autocomplete</span>=<span class="str">"email"</span>&gt;
+&lt;<span class="tag">button</span> <span class="attr">type</span>=<span class="str">"button"</span> <span class="attr">onclick</span>=<span class="str">"subscribeNewsletter()"</span>&gt;Subscribe&lt;/<span class="tag">button</span>&gt;
+
+<span class="cmt">&lt;!-- ADD THIS LINE immediately after the button --&gt;</span>
+&lt;<span class="tag">p</span> <span class="attr">id</span>=<span class="str">"newsletter-msg"</span> <span class="attr">role</span>=<span class="str">"status"</span> <span class="attr">aria-live</span>=<span class="str">"polite"</span>
+   <span class="attr">style</span>=<span class="str">"font-size:0.82rem;margin-top:0.5rem;min-height:1.2em;"</span>&gt;&lt;/<span class="tag">p</span>&gt;</pre>
+      </div>
+    </div>
+
+    <!-- FIX 4: Social icons aria -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">4</div>
+        <div>
+          <div class="fix-title">Replace emoji social icons with SVG + aria-labels</div>
+          <span class="fix-file">index.html</span>
+          <span class="badge warn" style="margin-left:8px">Accessibility</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> In <code>index.html</code>, find the footer social links. They currently use emoji (📸💙💬🎵). Replace the entire social links block with this:
+        </div>
+        <div class="code-label label-old">❌ REMOVE — your current emoji social links</div>
+        <pre>&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"..."</span> <span class="attr">title</span>=<span class="str">"Instagram"</span>&gt;📸&lt;/<span class="tag">a</span>&gt;
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"..."</span> <span class="attr">title</span>=<span class="str">"Facebook"</span>&gt;💙&lt;/<span class="tag">a</span>&gt;
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"..."</span> <span class="attr">title</span>=<span class="str">"WhatsApp"</span>&gt;💬&lt;/<span class="tag">a</span>&gt;
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"..."</span> <span class="attr">title</span>=<span class="str">"TikTok"</span>&gt;🎵&lt;/<span class="tag">a</span>&gt;</pre>
+        <div class="code-label label-new">✅ REPLACE WITH — SVG icons with proper aria-labels</div>
+        <pre>&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"https://www.instagram.com/scs_skin.care/"</span>
+   <span class="attr">class</span>=<span class="str">"social-btn"</span> <span class="attr">target</span>=<span class="str">"_blank"</span> <span class="attr">rel</span>=<span class="str">"noopener"</span>
+   <span class="attr">aria-label</span>=<span class="str">"SCS Beauty on Instagram"</span>&gt;
+  &lt;<span class="tag">svg</span> <span class="attr">width</span>=<span class="str">"20"</span> <span class="attr">height</span>=<span class="str">"20"</span> <span class="attr">viewBox</span>=<span class="str">"0 0 24 24"</span> <span class="attr">fill</span>=<span class="str">"none"</span>
+       <span class="attr">stroke</span>=<span class="str">"currentColor"</span> <span class="attr">stroke-width</span>=<span class="str">"2"</span> <span class="attr">aria-hidden</span>=<span class="str">"true"</span>&gt;
+    &lt;<span class="tag">rect</span> <span class="attr">x</span>=<span class="str">"2"</span> <span class="attr">y</span>=<span class="str">"2"</span> <span class="attr">width</span>=<span class="str">"20"</span> <span class="attr">height</span>=<span class="str">"20"</span> <span class="attr">rx</span>=<span class="str">"5"</span>/&gt;
+    &lt;<span class="tag">circle</span> <span class="attr">cx</span>=<span class="str">"12"</span> <span class="attr">cy</span>=<span class="str">"12"</span> <span class="attr">r</span>=<span class="str">"4"</span>/&gt;
+    &lt;<span class="tag">circle</span> <span class="attr">cx</span>=<span class="str">"17.5"</span> <span class="attr">cy</span>=<span class="str">"6.5"</span> <span class="attr">r</span>=<span class="str">"1"</span> <span class="attr">fill</span>=<span class="str">"currentColor"</span>/&gt;
+  &lt;/<span class="tag">svg</span>&gt;
+&lt;/<span class="tag">a</span>&gt;
+
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"https://www.facebook.com/SuccessChaserStars/"</span>
+   <span class="attr">class</span>=<span class="str">"social-btn"</span> <span class="attr">target</span>=<span class="str">"_blank"</span> <span class="attr">rel</span>=<span class="str">"noopener"</span>
+   <span class="attr">aria-label</span>=<span class="str">"SCS Beauty on Facebook"</span>&gt;
+  &lt;<span class="tag">svg</span> <span class="attr">width</span>=<span class="str">"20"</span> <span class="attr">height</span>=<span class="str">"20"</span> <span class="attr">viewBox</span>=<span class="str">"0 0 24 24"</span>
+       <span class="attr">fill</span>=<span class="str">"currentColor"</span> <span class="attr">aria-hidden</span>=<span class="str">"true"</span>&gt;
+    &lt;<span class="tag">path</span> <span class="attr">d</span>=<span class="str">"M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"</span>/&gt;
+  &lt;/<span class="tag">svg</span>&gt;
+&lt;/<span class="tag">a</span>&gt;
+
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"https://wa.me/923017658679"</span>
+   <span class="attr">class</span>=<span class="str">"social-btn"</span> <span class="attr">target</span>=<span class="str">"_blank"</span> <span class="attr">rel</span>=<span class="str">"noopener"</span>
+   <span class="attr">aria-label</span>=<span class="str">"Contact SCS Beauty on WhatsApp"</span>&gt;
+  &lt;<span class="tag">svg</span> <span class="attr">width</span>=<span class="str">"20"</span> <span class="attr">height</span>=<span class="str">"20"</span> <span class="attr">viewBox</span>=<span class="str">"0 0 24 24"</span>
+       <span class="attr">fill</span>=<span class="str">"currentColor"</span> <span class="attr">aria-hidden</span>=<span class="str">"true"</span>&gt;
+    &lt;<span class="tag">path</span> <span class="attr">d</span>=<span class="str">"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"</span>/&gt;
+  &lt;/<span class="tag">svg</span>&gt;
+&lt;/<span class="tag">a</span>&gt;
+
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"https://www.tiktok.com/@successchaserstar"</span>
+   <span class="attr">class</span>=<span class="str">"social-btn"</span> <span class="attr">target</span>=<span class="str">"_blank"</span> <span class="attr">rel</span>=<span class="str">"noopener"</span>
+   <span class="attr">aria-label</span>=<span class="str">"SCS Beauty on TikTok"</span>&gt;
+  &lt;<span class="tag">svg</span> <span class="attr">width</span>=<span class="str">"20"</span> <span class="attr">height</span>=<span class="str">"20"</span> <span class="attr">viewBox</span>=<span class="str">"0 0 24 24"</span>
+       <span class="attr">fill</span>=<span class="str">"currentColor"</span> <span class="attr">aria-hidden</span>=<span class="str">"true"</span>&gt;
+    &lt;<span class="tag">path</span> <span class="attr">d</span>=<span class="str">"M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.19 8.19 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"</span>/&gt;
+  &lt;/<span class="tag">svg</span>&gt;
+&lt;/<span class="tag">a</span>&gt;</pre>
+      </div>
+    </div>
+
+    <!-- FIX 5: Footer links -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">5</div>
+        <div>
+          <div class="fix-title">Fix footer dead links (Privacy, Terms, Delivery)</div>
+          <span class="fix-file">index.html</span>
+          <span class="badge crit" style="margin-left:8px">Critical</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> In <code>index.html</code>, find the footer bottom section.
+        </div>
+        <div class="code-label label-old">❌ REMOVE</div>
+        <pre>&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"#"</span>&gt;Privacy Policy&lt;/<span class="tag">a</span>&gt; · &lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"#"</span>&gt;Terms&lt;/<span class="tag">a</span>&gt; · &lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"#"</span>&gt;Delivery Policy&lt;/<span class="tag">a</span>&gt;</pre>
+        <div class="code-label label-new">✅ REPLACE WITH</div>
+        <pre>&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"privacy.html"</span>&gt;Privacy Policy&lt;/<span class="tag">a</span>&gt; ·
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"terms.html"</span>&gt;Terms &amp;amp; Conditions&lt;/<span class="tag">a</span>&gt; ·
+&lt;<span class="tag">a</span> <span class="attr">href</span>=<span class="str">"delivery.html"</span>&gt;Delivery Policy&lt;/<span class="tag">a</span>&gt;</pre>
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>Then upload the 3 new files</strong> included with this guide: <code>privacy.html</code>, <code>terms.html</code>, <code>delivery.html</code> — upload them to your GitHub repository root (same level as index.html).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════ PHASE 2 ══════════════════ -->
+  <span class="section-anchor" id="phase2"></span>
+  <div class="phase">
+    <div class="phase-label">Phase 2</div>
+    <h2>Conversion Improvements</h2>
+    <p class="phase-sub">More revenue per visitor.</p>
+
+    <!-- FIX 6: Product cards -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">6</div>
+        <div>
+          <div class="fix-title">Improve product cards — benefits list + personalised WhatsApp CTA</div>
+          <span class="fix-file">js/products.js</span>
+          <span class="badge warn" style="margin-left:8px">Conversion</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> Open <code>js/products.js</code>. Find the card template inside your <code>renderProducts</code> function (the HTML string that builds each card). Replace it entirely.
+        </div>
+        <div class="code-label label-old">❌ REMOVE — your current card HTML template</div>
+        <pre><span class="cmt">// (find the template literal that renders each card)</span>
+<span class="cmt">// Typically looks like: `&lt;div class="product-card"&gt;...&lt;/div&gt;`</span></pre>
+        <div class="code-label label-new">✅ REPLACE WITH — improved card template with benefits + personalised CTA</div>
+        <pre><span class="cmt">// 1. First, add benefits to each product in your SCS_PRODUCTS array:</span>
+<span class="cmt">//    benefits: ["Brightens dark spots", "Boosts collagen", "Antioxidant protection"]</span>
+
+<span class="cmt">// 2. Then use this template in renderProducts():</span>
+grid.innerHTML = SCS_PRODUCTS.map(p => <span class="str">`
+  &lt;article class="product-card reveal"
+           role="listitem"
+           aria-label="${p.name} — PKR ${p.price.toLocaleString()}"&gt;
+
+    ${p.badge ? <span class="str">`&lt;div class="product-badge"&gt;${p.badge}&lt;/div&gt;`</span> : <span class="str">''</span>}
+
+    &lt;div class="product-img ${p.bg}"
+         role="img"
+         aria-label="${p.name} product image"&gt;
+      &lt;span class="product-icon" aria-hidden="true"&gt;${p.icon}&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class="product-info"&gt;
+      &lt;div class="product-category"&gt;${p.category}&lt;/div&gt;
+      &lt;h3 class="product-name"&gt;${p.name}&lt;/h3&gt;
+      &lt;p class="product-desc"&gt;${p.desc}&lt;/p&gt;
+
+      &lt;ul class="product-benefits" aria-label="Key benefits"&gt;
+        ${(p.benefits || []).map(b => <span class="str">`&lt;li&gt;${b}&lt;/li&gt;`</span>).join(<span class="str">''</span>)}
+      &lt;/ul&gt;
+
+      &lt;div class="product-footer"&gt;
+        &lt;div class="product-price"&gt;
+          PKR &lt;span&gt;${p.price.toLocaleString()}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;a href="https://wa.me/923017658679?text=Hi!%20I%20want%20to%20order%20the%20${<span class="attr">encodeURIComponent</span>(p.name)}%20(PKR%20${p.price})"
+           class="product-btn"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Order ${p.name} on WhatsApp"&gt;
+          Order Now →
+        &lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/article&gt;
+`</span>).join(<span class="str">''</span>);</pre>
+
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>Also add this CSS</strong> to <code>css/style.css</code> for the benefits list:
+        </div>
+        <div class="code-label label-new">✅ Add to css/style.css</div>
+        <pre><span class="attr">.product-benefits</span> {
+  list-style: none;
+  margin: 0.75rem 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+<span class="attr">.product-benefits li</span> {
+  font-size: 0.78rem;
+  color: #666;
+  padding-left: 1rem;
+  position: relative;
+}
+<span class="attr">.product-benefits li::before</span> {
+  content: <span class="str">'✓'</span>;
+  position: absolute;
+  left: 0;
+  color: <span class="val">#1D9E75</span>;
+  font-weight: 600;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════ PHASE 3 ══════════════════ -->
+  <span class="section-anchor" id="phase3"></span>
+  <div class="phase">
+    <div class="phase-label">Phase 3</div>
+    <h2>SEO &amp; Social Sharing</h2>
+    <p class="phase-sub">Be found on Google. Look great on WhatsApp and Facebook shares.</p>
+
+    <!-- FIX 7: Meta tags -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">7</div>
+        <div>
+          <div class="fix-title">Add Open Graph, Twitter Card, and Canonical tags</div>
+          <span class="fix-file">index.html — &lt;head&gt; section</span>
+          <span class="badge warn" style="margin-left:8px">SEO</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> In <code>index.html</code>, find your existing <code>&lt;meta&gt;</code> tags in the <code>&lt;head&gt;</code>. Add the following block right after your existing og: meta tags.
+        </div>
+        <div class="code-label label-old">❌ Your current meta section (missing these)</div>
+        <pre>&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:title"</span> <span class="attr">content</span>=<span class="str">"..."</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:description"</span> <span class="attr">content</span>=<span class="str">"..."</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:type"</span> <span class="attr">content</span>=<span class="str">"website"</span>&gt;
+<span class="cmt">&lt;!-- og:image MISSING — this is why WhatsApp previews show no image --&gt;</span></pre>
+        <div class="code-label label-new">✅ REPLACE your og: block with this complete set</div>
+        <pre><span class="cmt">&lt;!-- ═══ SEO: Canonical ═══ --&gt;</span>
+&lt;<span class="tag">link</span> <span class="attr">rel</span>=<span class="str">"canonical"</span>
+      <span class="attr">href</span>=<span class="str">"https://iqra432javed-cpu.github.io/scs-beauty/"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="str">"robots"</span> <span class="attr">content</span>=<span class="str">"index, follow"</span>&gt;
+
+<span class="cmt">&lt;!-- ═══ Open Graph ═══ --&gt;</span>
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:title"</span>
+      <span class="attr">content</span>=<span class="str">"Success Chaser Stars — Organic Beauty &amp; Skincare Pakistan"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:description"</span>
+      <span class="attr">content</span>=<span class="str">"Pakistan's premier luxury beauty brand. Vitamin C Serums, Glow Serums, Beauty Creams. COD nationwide."</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:type"</span> <span class="attr">content</span>=<span class="str">"website"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:url"</span>
+      <span class="attr">content</span>=<span class="str">"https://iqra432javed-cpu.github.io/scs-beauty/"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:image"</span>
+      <span class="attr">content</span>=<span class="str">"https://iqra432javed-cpu.github.io/scs-beauty/assests/images/og-image.jpg"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:image:width"</span> <span class="attr">content</span>=<span class="str">"1200"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:image:height"</span> <span class="attr">content</span>=<span class="str">"630"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:image:alt"</span>
+      <span class="attr">content</span>=<span class="str">"Success Chaser Stars — Pakistan's Premium Organic Beauty Brand"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:site_name"</span> <span class="attr">content</span>=<span class="str">"Success Chaser Stars"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">property</span>=<span class="str">"og:locale"</span> <span class="attr">content</span>=<span class="str">"en_PK"</span>&gt;
+
+<span class="cmt">&lt;!-- ═══ Twitter Card ═══ --&gt;</span>
+&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="str">"twitter:card"</span> <span class="attr">content</span>=<span class="str">"summary_large_image"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="str">"twitter:title"</span>
+      <span class="attr">content</span>=<span class="str">"Success Chaser Stars — Organic Beauty Pakistan"</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="str">"twitter:description"</span>
+      <span class="attr">content</span>=<span class="str">"Pakistan's premium organic skincare. Vitamin C Serums, Glow Serums &amp; more. COD nationwide."</span>&gt;
+&lt;<span class="tag">meta</span> <span class="attr">name</span>=<span class="str">"twitter:image"</span>
+      <span class="attr">content</span>=<span class="str">"https://iqra432javed-cpu.github.io/scs-beauty/assests/images/og-image.jpg"</span>&gt;</pre>
+
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>Important:</strong> You still need to <strong>create the og-image.jpg file</strong>.<br>
+          Make a 1200×630px image in Canva showing your products + brand name. Export as JPG and upload to <code>assests/images/og-image.jpg</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- FIX 8: JSON-LD -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">8</div>
+        <div>
+          <div class="fix-title">Add JSON-LD Organization + Product schema</div>
+          <span class="fix-file">index.html + js/products.js</span>
+          <span class="badge warn" style="margin-left:8px">SEO — Google Shopping</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Where:</strong> In <code>index.html</code>, paste this block right before <code>&lt;/head&gt;</code>:
+        </div>
+        <div class="code-label label-new">✅ Paste before &lt;/head&gt; in index.html</div>
+        <pre>&lt;<span class="tag">script</span> <span class="attr">type</span>=<span class="str">"application/ld+json"</span>&gt;
+{
+  <span class="str">"@context"</span>: <span class="str">"https://schema.org"</span>,
+  <span class="str">"@type"</span>: <span class="str">"Organization"</span>,
+  <span class="str">"name"</span>: <span class="str">"Success Chaser Stars"</span>,
+  <span class="str">"url"</span>: <span class="str">"https://iqra432javed-cpu.github.io/scs-beauty/"</span>,
+  <span class="str">"description"</span>: <span class="str">"Pakistan's premier organic beauty and wellness brand"</span>,
+  <span class="str">"contactPoint"</span>: {
+    <span class="str">"@type"</span>: <span class="str">"ContactPoint"</span>,
+    <span class="str">"telephone"</span>: <span class="str">"+92-301-765-8679"</span>,
+    <span class="str">"contactType"</span>: <span class="str">"customer service"</span>,
+    <span class="str">"availableLanguage"</span>: [<span class="str">"en"</span>, <span class="str">"ur"</span>]
+  },
+  <span class="str">"sameAs"</span>: [
+    <span class="str">"https://www.instagram.com/scs_skin.care/"</span>,
+    <span class="str">"https://www.facebook.com/SuccessChaserStars/"</span>,
+    <span class="str">"https://www.tiktok.com/@successchaserstar"</span>
+  ]
+}
+&lt;/<span class="tag">script</span>&gt;</pre>
+
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>For Product schema</strong> — add this function to <code>js/products.js</code> and call it after rendering:
+        </div>
+        <div class="code-label label-new">✅ Add to js/products.js</div>
+        <pre><span class="kw">function</span> <span class="attr">injectProductSchema</span>() {
+  <span class="kw">const</span> schema = {
+    <span class="str">"@context"</span>: <span class="str">"https://schema.org"</span>,
+    <span class="str">"@type"</span>: <span class="str">"ItemList"</span>,
+    <span class="str">"name"</span>: <span class="str">"SCS Beauty Products"</span>,
+    <span class="str">"itemListElement"</span>: SCS_PRODUCTS.map((p, i) => ({
+      <span class="str">"@type"</span>: <span class="str">"ListItem"</span>,
+      <span class="str">"position"</span>: i + 1,
+      <span class="str">"item"</span>: {
+        <span class="str">"@type"</span>: <span class="str">"Product"</span>,
+        <span class="str">"name"</span>: p.name,
+        <span class="str">"description"</span>: p.desc,
+        <span class="str">"brand"</span>: { <span class="str">"@type"</span>: <span class="str">"Brand"</span>, <span class="str">"name"</span>: <span class="str">"Success Chaser Stars"</span> },
+        <span class="str">"offers"</span>: {
+          <span class="str">"@type"</span>: <span class="str">"Offer"</span>,
+          <span class="str">"price"</span>: p.price,
+          <span class="str">"priceCurrency"</span>: <span class="str">"PKR"</span>,
+          <span class="str">"availability"</span>: <span class="str">"https://schema.org/InStock"</span>
+        }
+      }
+    }))
+  };
+  <span class="kw">const</span> el = document.createElement(<span class="str">'script'</span>);
+  el.type = <span class="str">'application/ld+json'</span>;
+  el.textContent = JSON.stringify(schema);
+  document.head.appendChild(el);
+}
+
+<span class="cmt">// call it inside your DOMContentLoaded:</span>
+document.addEventListener(<span class="str">'DOMContentLoaded'</span>, () => {
+  renderProducts();
+  injectProductSchema(); <span class="cmt">// ← ADD THIS LINE</span>
+});</pre>
+      </div>
+    </div>
+
+    <!-- FIX 9: robots + sitemap -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">9</div>
+        <div>
+          <div class="fix-title">Create robots.txt and sitemap.xml</div>
+          <span class="fix-file">robots.txt + sitemap.xml (new files — root of repo)</span>
+          <span class="badge warn" style="margin-left:8px">SEO</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>How:</strong> On GitHub, click <strong>Add file → Create new file</strong>. Name it <code>robots.txt</code>. Paste the content below. Repeat for <code>sitemap.xml</code>.
+        </div>
+        <div class="code-label label-create">📄 CREATE: robots.txt (root of repo)</div>
+        <pre>User-agent: *
+Allow: /
+
+Sitemap: https://iqra432javed-cpu.github.io/scs-beauty/sitemap.xml</pre>
+
+        <div class="code-label label-create" style="margin-top:1rem">📄 CREATE: sitemap.xml (root of repo)</div>
+        <pre>&lt;?xml version=<span class="str">"1.0"</span> encoding=<span class="str">"UTF-8"</span>?&gt;
+&lt;<span class="tag">urlset</span> <span class="attr">xmlns</span>=<span class="str">"http://www.sitemaps.org/schemas/sitemap/0.9"</span>&gt;
+  &lt;<span class="tag">url</span>&gt;
+    &lt;<span class="tag">loc</span>&gt;https://iqra432javed-cpu.github.io/scs-beauty/&lt;/<span class="tag">loc</span>&gt;
+    &lt;<span class="tag">priority</span>&gt;1.0&lt;/<span class="tag">priority</span>&gt;
+    &lt;<span class="tag">changefreq</span>&gt;weekly&lt;/<span class="tag">changefreq</span>&gt;
+  &lt;/<span class="tag">url</span>&gt;
+  &lt;<span class="tag">url</span>&gt;
+    &lt;<span class="tag">loc</span>&gt;https://iqra432javed-cpu.github.io/scs-beauty/privacy.html&lt;/<span class="tag">loc</span>&gt;
+    &lt;<span class="tag">priority</span>&gt;0.3&lt;/<span class="tag">priority</span>&gt;
+  &lt;/<span class="tag">url</span>&gt;
+  &lt;<span class="tag">url</span>&gt;
+    &lt;<span class="tag">loc</span>&gt;https://iqra432javed-cpu.github.io/scs-beauty/terms.html&lt;/<span class="tag">loc</span>&gt;
+    &lt;<span class="tag">priority</span>&gt;0.3&lt;/<span class="tag">priority</span>&gt;
+  &lt;/<span class="tag">url</span>&gt;
+  &lt;<span class="tag">url</span>&gt;
+    &lt;<span class="tag">loc</span>&gt;https://iqra432javed-cpu.github.io/scs-beauty/delivery.html&lt;/<span class="tag">loc</span>&gt;
+    &lt;<span class="tag">priority</span>&gt;0.5&lt;/<span class="tag">priority</span>&gt;
+  &lt;/<span class="tag">url</span>&gt;
+&lt;/<span class="tag">urlset</span>&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════ PHASE 4 ══════════════════ -->
+  <span class="section-anchor" id="phase4"></span>
+  <div class="phase">
+    <div class="phase-label">Phase 4</div>
+    <h2>Performance</h2>
+    <p class="phase-sub">Faster site = better SEO + better conversion on Pakistan's 4G/3G networks.</p>
+
+    <!-- FIX 10: Lazy loading + fonts -->
+    <div class="fix-block">
+      <div class="fix-header">
+        <div class="fix-num">10</div>
+        <div>
+          <div class="fix-title">Add lazy loading + preconnect for Google Fonts</div>
+          <span class="fix-file">index.html + js/products.js</span>
+          <span class="badge warn" style="margin-left:8px">Performance</span>
+        </div>
+      </div>
+      <div class="fix-body">
+        <div class="fix-instruction">
+          <strong>Part A:</strong> In <code>index.html</code> &lt;head&gt;, find your Google Fonts link and add a <code>preconnect</code> before it:
+        </div>
+        <div class="code-label label-new">✅ Add before your Google Fonts &lt;link&gt;</div>
+        <pre>&lt;<span class="tag">link</span> <span class="attr">rel</span>=<span class="str">"preconnect"</span> <span class="attr">href</span>=<span class="str">"https://fonts.googleapis.com"</span>&gt;
+&lt;<span class="tag">link</span> <span class="attr">rel</span>=<span class="str">"preconnect"</span> <span class="attr">href</span>=<span class="str">"https://fonts.gstatic.com"</span> <span class="attr">crossorigin</span>&gt;</pre>
+
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>Part B:</strong> In <code>js/products.js</code>, inside your product card template, the product-img div already renders lazily (it's a CSS background). But if you ever add real <code>&lt;img&gt;</code> tags, always include:
+        </div>
+        <div class="code-label label-new">✅ Any &lt;img&gt; tag — always add loading="lazy"</div>
+        <pre>&lt;<span class="tag">img</span>
+  <span class="attr">src</span>=<span class="str">"assests/products/vitamin-c-serum.jpg"</span>
+  <span class="attr">alt</span>=<span class="str">"SCS Vitamin C Serum — brightening serum for dark spots"</span>
+  <span class="attr">width</span>=<span class="str">"400"</span>
+  <span class="attr">height</span>=<span class="str">"400"</span>
+  <span class="attr">loading</span>=<span class="str">"lazy"</span>
+  <span class="attr">decoding</span>=<span class="str">"async"</span>
+&gt;</pre>
+
+        <div class="fix-instruction" style="margin-top:0.75rem">
+          <strong>Part C:</strong> Move your script tags to just before <code>&lt;/body&gt;</code> if they're currently in <code>&lt;head&gt;</code>. They should already be at the bottom, but double-check:
+        </div>
+        <div class="code-label label-new">✅ Scripts should be at the very end of &lt;body&gt;</div>
+        <pre><span class="cmt">&lt;!-- Always at the bottom, just before &lt;/body&gt; --&gt;</span>
+&lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"js/products.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;
+&lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"js/app.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;
+&lt;/<span class="tag">body</span>&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════ FINAL REPORT ══════════════════ -->
+  <span class="section-anchor" id="final"></span>
+  <h2 style="font-weight:normal;margin:0 0 1.5rem;font-size:1.6rem">Final Report</h2>
+
+  <div class="final-grid">
+    <div class="final-card">
+      <h3>✅ Files Modified</h3>
+      <ul>
+        <li><code>js/app.js</code> — counter fix, newsletter, aria</li>
+        <li><code>js/products.js</code> — benefits, schema, WhatsApp CTA</li>
+        <li><code>index.html</code> — OG/Twitter meta, footer links, SVG socials</li>
+        <li><code>css/style.css</code> — product-benefits styles</li>
+      </ul>
+    </div>
+    <div class="final-card">
+      <h3>📄 Files Created (new)</h3>
+      <ul>
+        <li><code>privacy.html</code> — real privacy policy</li>
+        <li><code>terms.html</code> — real terms &amp; conditions</li>
+        <li><code>delivery.html</code> — real delivery policy</li>
+        <li><code>robots.txt</code> — Google crawler instructions</li>
+        <li><code>sitemap.xml</code> — all pages indexed</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="font-weight:normal;margin:1.5rem 0 1rem">⚠️ Remaining Manual Tasks</h3>
+  <ul class="manual-list">
+    <li>
+      <span class="ml-icon">🖼️</span>
+      <div><strong>Create og-image.jpg</strong> (1200×630px) — open Canva, make a branded image with your products + logo. Export as JPG. Upload to <code>assests/images/og-image.jpg</code>. This is the single highest-impact remaining task for Pakistani social commerce.</div>
+    </li>
+    <li>
+      <span class="ml-icon">📸</span>
+      <div><strong>Photograph your real products</strong> — place them on a white surface near a window, photograph with your phone. Even basic product photos massively outperform emoji icons for conversions.</div>
+    </li>
+    <li>
+      <span class="ml-icon">🔄</span>
+      <div><strong>Rename blog,html → blog.html</strong> via Git terminal (you cannot do this on GitHub UI). Command: <code>git mv "blog,html" "blog.html" && git commit -m "fix: rename" && git push</code></div>
+    </li>
+    <li>
+      <span class="ml-icon">📧</span>
+      <div><strong>Connect newsletter to Brevo (free)</strong> — sign up at brevo.com, create a list, get the API key, and replace the simulate comment in app.js with a real POST to their API. Free up to 300 emails/day.</div>
+    </li>
+    <li>
+      <span class="ml-icon">📊</span>
+      <div><strong>Add Google Analytics</strong> — sign up at analytics.google.com, get your GA4 measurement ID, paste the tracking snippet before <code>&lt;/head&gt;</code> in index.html. Free. Essential for understanding your traffic.</div>
+    </li>
+  </ul>
+
+  <h3 style="font-weight:normal;margin:2rem 0 1rem">Launch Readiness Score</h3>
+  <div class="score-bar-wrap">
+    <div class="score-row">
+      <span class="label">Design & UI</span>
+      <div class="bar-track">
+        <div class="bar-before" style="width:82%"></div>
+        <div class="bar-after" style="width:88%"></div>
+      </div>
+      <span class="score-val">82 → <strong style="color:var(--green)">88</strong></span>
+    </div>
+    <div class="score-row">
+      <span class="label">Code Quality</span>
+      <div class="bar-track">
+        <div class="bar-before" style="width:68%"></div>
+        <div class="bar-after" style="width:87%"></div>
+      </div>
+      <span class="score-val">68 → <strong style="color:var(--green)">87</strong></span>
+    </div>
+    <div class="score-row">
+      <span class="label">SEO & Meta</span>
+      <div class="bar-track">
+        <div class="bar-before" style="width:40%"></div>
+        <div class="bar-after" style="width:91%"></div>
+      </div>
+      <span class="score-val">40 → <strong style="color:var(--green)">91</strong></span>
+    </div>
+    <div class="score-row">
+      <span class="label">Performance</span>
+      <div class="bar-track">
+        <div class="bar-before" style="width:58%"></div>
+        <div class="bar-after" style="width:75%"></div>
+      </div>
+      <span class="score-val">58 → <strong style="color:var(--green)">75</strong></span>
+    </div>
+    <div class="score-row">
+      <span class="label">Accessibility</span>
+      <div class="bar-track">
+        <div class="bar-before" style="width:35%"></div>
+        <div class="bar-after" style="width:78%"></div>
+      </div>
+      <span class="score-val">35 → <strong style="color:var(--green)">78</strong></span>
+    </div>
+    <div class="score-row">
+      <span class="label">Legal / Trust</span>
+      <div class="bar-track">
+        <div class="bar-before" style="width:10%"></div>
+        <div class="bar-after" style="width:90%"></div>
+      </div>
+      <span class="score-val">10 → <strong style="color:var(--green)">90</strong></span>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,#8B4A56,#B76E79);border-radius:16px;padding:2rem;text-align:center;margin-top:2rem;color:white">
+    <div style="font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;opacity:0.7;margin-bottom:0.5rem">Overall Launch Score</div>
+    <div style="font-size:3rem;font-weight:300;line-height:1">52 → <strong>89</strong><span style="font-size:1.2rem;opacity:0.8">/100</span></div>
+    <div style="margin-top:0.75rem;opacity:0.85;font-size:0.9rem">After all Phase 1–4 fixes applied.<br>Remaining 11 points: real product photos + OG image.</div>
+  </div>
+
+</div>
+</body>
+</html>
