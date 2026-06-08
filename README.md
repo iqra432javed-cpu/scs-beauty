@@ -123,4 +123,4 @@ The product will automatically appear on the homepage grid.
 
 ---
 
-*© 2025 Success Chaser Stars. All rights reserved.*
+*© 2026 Success Chaser Stars. All rights reserved.*
